@@ -21,7 +21,7 @@ export const Footer = async () => {
       </div>
 
       <div className='flex items-center justify-center'>
-        <Link href='https://x.com/angler' target="_blank">
+        <Link href='https://x.com/one-kyobashi-commons' target="_blank">
           <BsTwitter className='w-5 h-5' />
         </Link>
       </div>
