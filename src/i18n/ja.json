@@ -2,6 +2,11 @@
   "main": {
     "hero": {
       "caption": ""
+    },
+    "footer": {
+      "termsOfService": "利用規約",
+      "privacyPolicy": "個人情報の取り扱いについて",
+      "commerceDisclosure": "特定商取引法に基づく表記"
     }
   }
 }

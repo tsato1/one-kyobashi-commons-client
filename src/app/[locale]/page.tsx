@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { Hero } from "./_sections/hero";
 
 interface HomeProps {
@@ -15,6 +16,8 @@ export default async function Home({
       <Navbar locale={locale} />
 
       <Hero />
+
+      <Footer />
     </main>
   );
 }

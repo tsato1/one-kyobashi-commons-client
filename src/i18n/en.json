@@ -2,6 +2,11 @@
   "main": {
     "hero": {
       "caption": ""
+    },
+    "footer": {
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy",
+      "commerceDisclosure": "Commerce Disclosure"
     }
   }
 }

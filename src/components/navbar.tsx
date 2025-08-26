@@ -40,7 +40,7 @@ export const Navbar = ({
         className="relative w-48 sm:w-52 h-12 sm:h-16 mr-auto cursor-pointer"
       >
         <Image
-          src="/images/logo.webp"
+          src="/logo.png"
           alt="logo"
           sizes="(max-width: 600px) 100vw, (max-width: 780px) 50vw, 33vw"
           style={{ objectFit: "cover" }}
@@ -116,7 +116,7 @@ export const LanguageSelect = ({
                 width={20}
                 height={20} />
 
-              <p className="font-medium text-zinc-800 dark:text-zinc-200">
+              <p className="font-medium">
                 {localeToLanguageString(Locale[item as keyof typeof Locale])}
               </p>
             </div>
