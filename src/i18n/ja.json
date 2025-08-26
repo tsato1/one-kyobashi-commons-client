@@ -1,7 +1,13 @@
 {
   "main": {
     "hero": {
-      "caption": ""
+      "headline1": "ONE京橋コモンズ",
+      "headline2": ""
+    },
+    "sponsors": {
+      "title": "私たちのスポンサー",
+      "description": "私たちのミッションを可能にするために支援してくださるスポンサーの皆様に感謝いたします。",
+      "becomeASponsor": "スポンサーになる"
     },
     "footer": {
       "termsOfService": "利用規約",

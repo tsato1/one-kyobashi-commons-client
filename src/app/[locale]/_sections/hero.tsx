@@ -15,9 +15,9 @@ export const Hero = async () => {
       </div> */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/60" />
       <div className="absolute top-1/2 left-1/2 -translate-1/2 text-yellow-50 p-4">
-        <h1 lang="ja" className="text-4xl sm:text-5xl">ONE京橋コモンズ</h1>
+        <h1 lang="ja" className="text-4xl sm:text-5xl">{t("headline1")}</h1>
         <br />
-        <h2 className="text-base sm:text-xl">{t("caption")}</h2>
+        <h2 className="text-base sm:text-xl">{t("headline2")}</h2>
       </div>
     </section>
   );
