@@ -24,7 +24,7 @@ export const Sponsors = async () => {
         items={items}
         clones={1}
         gap="40px"
-        duration="40s"
+        duration="100s"
         direction="left"
         pauseOnHover={false}
         className="mb-8 sm:mb-16" />
