@@ -17,7 +17,7 @@ export const Sponsors = async () => {
   const t = await getTranslations("main.sponsors");
 
   return (
-    <section id="sponsors" className="w-full bg-neutral-200 px-2 sm:px-4 py-20 sm:py-40">
+    <section id="sponsors" className="w-full bg-neutral-200 py-20 sm:py-40">
       <h2 className="text-center text-2xl font-semibold mb-8 sm:mb-16">{t("title")}</h2>
 
       <InfiniteScroller
