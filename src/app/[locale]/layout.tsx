@@ -98,7 +98,7 @@ export async function generateMetadata({
       follow: true,
     },
     icons: {
-      icon: "/favicon.jpg",
+      icon: "/favicon.png",
     }
     // verification: {
     //   google: "your-google-site-verification-code",
