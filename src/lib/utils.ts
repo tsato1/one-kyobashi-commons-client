@@ -12,6 +12,8 @@ export enum Locale {
   ja = 'ja'
 }
 
+export const localePattern = Object.values(Locale).join('|');
+
 export function localeToCountryCode(locale: Locale) {
   switch (locale) {
     case Locale.en:

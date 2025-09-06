@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { hasLocale } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from "next/navigation";
 
 import { routing } from '@/i18n/routing';
 import "./globals.css";
+import Providers from "@/app/[locale]/providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,9 +41,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
+        <Providers locale={locale} messages={messages}>
           {children}
-        </NextIntlClientProvider>
+        </Providers>
       </body>
     </html>
   );
@@ -61,10 +62,10 @@ export async function generateMetadata({
   const isJapanese = locale === "ja";
 
   return {
-    title: "One Kyobashi Commons",
+    title: "ONE Kyobashi Commons",
     description: isJapanese
-      ? "One京橋コモンズ"
-      : "One Kyobashi Commons",
+      ? "ONE京橋コモンズ"
+      : "ONE Kyobashi Commons",
     alternates: {
       canonical: isJapanese ? "/ja" : "/en",
       languages: {
@@ -88,8 +89,8 @@ export async function generateMetadata({
       site: "@one-kyobashi-commons",
       title: "ONE Kyobashi Commons",
       description: isJapanese
-        ? "One Kyobashi Commons"
-        : "One Kyobashi Commons",
+        ? "ONE京橋コモンズ"
+        : "ONE Kyobashi Commons",
       // images: ["https://example.com/og-image.jpg"],
     },
     metadataBase: new URL("https://one-kyobashi-commons.com"),

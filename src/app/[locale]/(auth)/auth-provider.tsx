@@ -12,6 +12,7 @@ import {
   View,
 } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
+import { localePattern } from "@/lib/utils";
 
 // https://docs.amplify.aws/gen1/javascript/tools/libraries/configure-categories/
 Amplify.configure({
@@ -29,13 +30,13 @@ const components = {
     return (
       <View className="mt-4 mb-7">
         <Heading level={3} className="!text-2xl !font-bold">
-          RENT
+          ONE
           <span className="text-secondary-500 font-light hover:!text-primary-300">
-            IFUL
+            京橋コモンズ
           </span>
         </Heading>
         <p className="text-muted-foreground mt-2">
-          <span className="font-bold">Welcome!</span> Please sign in to continue
+          <span className="font-bold">Welcome!</span>
         </p>
       </View>
     );
@@ -43,12 +44,17 @@ const components = {
   SignIn: {
     Footer() {
       const { toSignUp } = useAuthenticator();
+      const router = useRouter();
+
       return (
         <View className="text-center mt-4">
           <p className="text-muted-foreground">
             Don&apos;t have an account?{" "}
             <button
-              onClick={toSignUp}
+              onClick={() => {
+                router.push("/signup")
+                toSignUp()
+              }}
               className="text-primary hover:underline bg-transparent border-none p-0"
             >
               Sign up here
@@ -72,8 +78,8 @@ const components = {
             hasError={!!validationErrors?.["custom:role"]}
             isRequired
           >
-            <Radio value="tenant">Tenant</Radio>
-            <Radio value="manager">Manager</Radio>
+            <Radio value="crew">Crew</Radio>
+            <Radio value="trustee">Trustee</Radio>
           </RadioGroupField>
         </>
       );
@@ -81,12 +87,17 @@ const components = {
 
     Footer() {
       const { toSignIn } = useAuthenticator();
+      const router = useRouter();
+
       return (
         <View className="text-center mt-4">
           <p className="text-muted-foreground">
             Already have an account?{" "}
             <button
-              onClick={toSignIn}
+              onClick={() => {
+                router.push("/signin")
+                toSignIn()
+              }}
               className="text-primary hover:underline bg-transparent border-none p-0"
             >
               Sign in
@@ -144,9 +155,9 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isAuthPage = pathname.match(/^\/(signin|signup)$/);
-  const isDashboardPage =
-    pathname.startsWith("/manager") || pathname.startsWith("/tenants");
+  const pattern = new RegExp(`^\\/(${localePattern})\\/(signin|signup)$`);
+  const isAuthPage = pattern.test(pathname);
+  const isDashboardPage = pathname.startsWith("/trustees") || pathname.startsWith("/crews");
 
   // Redirect authenticated users away from auth pages
   useEffect(() => {
