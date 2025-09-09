@@ -1,5 +1,3 @@
-import Auth from "../auth-provider";
-
 export default function SignUpPage() {
-  return <Auth>Sign Up</Auth>
+  return <div className="w-screen h-screen flex items-center justify-center">Loading...</div>
 }

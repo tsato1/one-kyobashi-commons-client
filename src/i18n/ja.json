@@ -14,5 +14,50 @@
       "privacyPolicy": "個人情報の取り扱いについて",
       "commerceDisclosure": "特定商取引法に基づく表記"
     }
+  },
+  "private": {
+    "crews": {
+      "dashboard": {
+        "caption": "あなたはクルーです！"
+      }
+    },
+    "trustees": {
+      "dashboard": {
+        "caption": "あなたは一味です！"
+      }
+    },
+    "common":{ 
+      "appSidebar": {
+        "titleCrew": "クルー",
+        "titleTrustee": "一味",
+        "dashboard": "ダッシュボード",
+        "events": "イベント",
+        "shop": "ショップ",
+        "revenue": "売上",
+        "applications": "応募",
+        "settings": "設定"
+      }
+    }
+  },
+  "common": {
+    "auth": {
+      "signIn": "サインイン",
+      "signUp": "登録",
+      "signOut": "サインアウト",
+      "name": "お名前",
+      "email": "Eメール",
+      "dontHaveAccount": "アカウント未登録ですか？",
+      "alreadyHaveAccount": "アカウントをお持ちですか？",
+      "signUpHere": "登録はこちら",
+      "role": "役割",
+      "crew": "クルー",
+      "trustee": "一味",
+      "goToDashboard": "ダッシュボードへ",
+      "settings": "設定"
+    },
+    "settings": {
+      "title": "設定",
+      "description": "アカウント情報や本アプリの使用方法を設定します"
+    }
   }
 }

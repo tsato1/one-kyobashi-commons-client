@@ -4,9 +4,10 @@ import { hasLocale } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from "next/navigation";
 
+import { Toaster } from "@/components/ui/sonner";
 import { routing } from '@/i18n/routing';
 import "./globals.css";
-import Providers from "@/app/[locale]/providers";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default async function RootLayout({
         <Providers locale={locale} messages={messages}>
           {children}
         </Providers>
+        <Toaster closeButton />
       </body>
     </html>
   );

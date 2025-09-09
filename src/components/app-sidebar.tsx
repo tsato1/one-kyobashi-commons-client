@@ -1,0 +1,137 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import {
+  BuildingIcon,
+  DollarSignIcon,
+  FileTextIcon,
+  HeartIcon,
+  HomeIcon,
+  MenuIcon,
+  SettingsIcon,
+  X,
+} from "lucide-react";
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+interface AppSidebarProps {
+  userRole: "trustee" | "crew";
+}
+
+export const AppSidebar = ({ userRole }: AppSidebarProps) => {
+  const t = useTranslations("private.common.appSidebar");
+  const pathname = usePathname();
+  const { toggleSidebar, open } = useSidebar();
+
+  const navLinks =
+    userRole === "trustee"
+      ? [
+        { icon: BuildingIcon, label: "dashboard", href: "/trustees/dashboard" },
+        {
+          icon: FileTextIcon,
+          label: "applications",
+          href: "/trustees/applications",
+        },
+        { icon: SettingsIcon, label: "settings", href: "/trustees/settings" },
+      ]
+      : [
+        { icon: HeartIcon, label: "dashboard", href: "/crews/dashboard" },
+        {
+          icon: FileTextIcon,
+          label: "events",
+          href: "/crews/events",
+        },
+        { icon: HomeIcon, label: "shop", href: "/crews/shop" },
+        { icon: DollarSignIcon, label: "revenue", href: "/crews/revenue" },
+        { icon: SettingsIcon, label: "settings", href: "/crews/settings" },
+      ];
+
+  return (
+    <Sidebar
+      collapsible="icon"
+      className="fixed left-0 bg-white shadow-lg pt-16 sm:pt-20"
+    >
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div
+              className={cn(
+                "flex min-h-[56px] w-full items-center pt-3 mb-3",
+                open ? "justify-between px-6" : "justify-center"
+              )}
+            >
+              {open ? (
+                <>
+                  <h1 className="text-xl font-bold text-gray-700">
+                    {userRole === "trustee" ? t("titleTrustee") : t("titleCrew")}
+                  </h1>
+                  <Button
+                    variant="ghost"
+                    className="hover:text-white"
+                    onClick={() => toggleSidebar()}
+                  >
+                    <X className="h-6 w-6" />
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="ghost"
+                  onClick={() => toggleSidebar()}
+                >
+                  <MenuIcon className="h-6 w-6" />
+                </Button>
+              )}
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarMenu>
+          {navLinks.map((link) => {
+            const isActive = pathname.includes(link.href);
+
+            return (
+              <SidebarMenuItem key={link.href}>
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    "flex items-center px-7 py-7",
+                    isActive
+                      ? "bg-secondary hover:bg-muted"
+                      : "",
+                    open ? "" : "ml-[6px]"
+                  )}
+                  tooltip={t(link.label)}
+                >
+                  <Link href={link.href} className="w-full" scroll={false}>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <link.icon className={`h-5 w-5 ${isActive ? "text-primary-foreground" : ""}`} />
+                      {open && (
+                        <span className={`font-medium ${isActive ? "text-primary-foreground" : ""}`}>
+                          {t(link.label)}
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarContent>
+    </Sidebar>
+  );
+};

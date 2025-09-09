@@ -14,5 +14,50 @@
       "privacyPolicy": "Privacy Policy",
       "commerceDisclosure": "Commerce Disclosure"
     }
+  },
+  "private": {
+    "crews": {
+      "dashboard": {
+        "caption": "You are a crew member!"
+      }
+    },
+    "trustees": {
+      "dashboard": {
+        "caption": "You are a trustee member!"
+      }
+    },
+    "common":{ 
+      "appSidebar": {
+        "titleCrew": "Crew View",
+        "titleTrustee": "Trustee View",
+        "dashboard": "Dashboard",
+        "events": "Events",
+        "shop": "Shop",
+        "revenue": "Revenue",
+        "applications": "Applications",
+        "settings": "Settings"
+      }
+    }
+  },
+  "common": {
+    "auth": {
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "signOut": "Sign Out",
+      "name": "Name",
+      "email": "Email",
+      "dontHaveAccount": "Don&apos;t have an account?",
+      "alreadyHaveAccount": "Already have an account?",
+      "signUpHere": "Sign up here",
+      "role": "Role",
+      "crew": "Crew",
+      "trustee": "Trustee",
+      "goToDashboard": "Go to Dashboard",
+      "settings": "Settings"
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Manage your account preferences and personal information"
+    }
   }
 }

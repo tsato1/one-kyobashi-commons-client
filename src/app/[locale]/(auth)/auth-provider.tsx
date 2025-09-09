@@ -2,25 +2,31 @@
 
 import React, { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { Amplify } from "aws-amplify";
+import { I18n } from "aws-amplify/utils"
 import {
   Authenticator,
   Heading,
   Radio,
   RadioGroupField,
+  translations,
   useAuthenticator,
   View,
 } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
+
+import { formFieldsEn, formFieldsJa } from "@/constants/auth-field-data";
 import { localePattern } from "@/lib/utils";
+
+I18n.putVocabularies(translations);
 
 // https://docs.amplify.aws/gen1/javascript/tools/libraries/configure-categories/
 Amplify.configure({
   Auth: {
     Cognito: {
       userPoolId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_ID!,
-      userPoolClientId:
-        process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_CLIENT_ID!,
+      userPoolClientId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_CLIENT_ID!,
     },
   },
 });
@@ -31,7 +37,7 @@ const components = {
       <View className="mt-4 mb-7">
         <Heading level={3} className="!text-2xl !font-bold">
           ONE
-          <span className="text-secondary-500 font-light hover:!text-primary-300">
+          <span className="text-secondary-500 font-light">
             京橋コモンズ
           </span>
         </Heading>
@@ -43,21 +49,22 @@ const components = {
   },
   SignIn: {
     Footer() {
+      const t = useTranslations("common.auth")
       const { toSignUp } = useAuthenticator();
       const router = useRouter();
 
       return (
         <View className="text-center mt-4">
           <p className="text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            {t("dontHaveAccount")} {" "}
             <button
               onClick={() => {
                 router.push("/signup")
                 toSignUp()
               }}
-              className="text-primary hover:underline bg-transparent border-none p-0"
+              className="text-primary-foreground hover:opacity-70 hover:underline underline-offset-4 bg-transparent border-none p-0 cursor-pointer"
             >
-              Sign up here
+              {t("signUpHere")}
             </button>
           </p>
         </View>
@@ -65,42 +72,48 @@ const components = {
     },
   },
   SignUp: {
+    // todo: don't show radio buttons for crew / trustee and register as crew by default
+    // "custom:role": {
+    //   type: "hidden",
+    //   defaultValue: "crew"
+    // },
     FormFields() {
+      const t = useTranslations("common.auth")
       const { validationErrors } = useAuthenticator();
 
       return (
         <>
           <Authenticator.SignUp.FormFields />
           <RadioGroupField
-            legend="Role"
+            legend={t("role")}
             name="custom:role"
             errorMessage={validationErrors?.["custom:role"]}
             hasError={!!validationErrors?.["custom:role"]}
             isRequired
           >
-            <Radio value="crew">Crew</Radio>
-            <Radio value="trustee">Trustee</Radio>
+            <Radio value="crew">{t("crew")}</Radio>
+            <Radio value="trustee">{t("trustee")}</Radio>
           </RadioGroupField>
         </>
       );
     },
-
     Footer() {
+      const t = useTranslations("common.auth")
       const { toSignIn } = useAuthenticator();
       const router = useRouter();
 
       return (
         <View className="text-center mt-4">
           <p className="text-muted-foreground">
-            Already have an account?{" "}
+            {t("alreadyHaveAccount")} {" "}
             <button
               onClick={() => {
                 router.push("/signin")
                 toSignIn()
               }}
-              className="text-primary hover:underline bg-transparent border-none p-0"
+              className="text-primary-foreground hover:opacity-70 hover:underline underline-offset-4 bg-transparent border-none p-0 cursor-pointer"
             >
-              Sign in
+              {t("signIn")}
             </button>
           </p>
         </View>
@@ -109,64 +122,28 @@ const components = {
   },
 };
 
-const formFields = {
-  signIn: {
-    username: {
-      placeholder: "Enter your email",
-      label: "Email",
-      isRequired: true,
-    },
-    password: {
-      placeholder: "Enter your password",
-      label: "Password",
-      isRequired: true,
-    },
-  },
-  signUp: {
-    username: {
-      order: 1,
-      placeholder: "Choose a username",
-      label: "Username",
-      isRequired: true,
-    },
-    email: {
-      order: 2,
-      placeholder: "Enter your email address",
-      label: "Email",
-      isRequired: true,
-    },
-    password: {
-      order: 3,
-      placeholder: "Create a password",
-      label: "Password",
-      isRequired: true,
-    },
-    confirm_password: {
-      order: 4,
-      placeholder: "Confirm your password",
-      label: "Confirm Password",
-      isRequired: true,
-    },
-  },
-};
-
-const Auth = ({ children }: { children: React.ReactNode }) => {
+const Auth = ({
+  children
+}: {
+  children: React.ReactNode
+}) => {
   const { user } = useAuthenticator((context) => [context.user]);
   const router = useRouter();
   const pathname = usePathname();
+  const locale = useLocale();
+
+  I18n.setLanguage(locale === "ja" ? "ja" : "en");
 
   const pattern = new RegExp(`^\\/(${localePattern})\\/(signin|signup)$`);
   const isAuthPage = pattern.test(pathname);
   const isDashboardPage = pathname.startsWith("/trustees") || pathname.startsWith("/crews");
 
-  // Redirect authenticated users away from auth pages
   useEffect(() => {
     if (user && isAuthPage) {
       router.push("/");
     }
   }, [user, isAuthPage, router]);
 
-  // Allow access to public pages without authentication
   if (!isAuthPage && !isDashboardPage) {
     return <>{children}</>;
   }
@@ -176,7 +153,8 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
       <Authenticator
         initialState={pathname.includes("signup") ? "signUp" : "signIn"}
         components={components}
-        formFields={formFields}
+        formFields={locale === "ja" ? formFieldsJa : formFieldsEn}
+      // socialProviders={["google", "apple"]} // todo: configure oauth
       >
         {() => <>{children}</>}
       </Authenticator>

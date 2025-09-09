@@ -51,8 +51,7 @@ export default function Gallery() {
                   <img
                     src={img.src}
                     alt={img.label}
-                    className="w-[300px] h-[400px]"
-                  />
+                    className="w-[300px] h-[400px]" />
                   <h3 className="m-0 text-[50px] font-bold tracking-[-3px] leading-tight relative bottom-[30px] inline-block">
                     {img.label}
                   </h3>

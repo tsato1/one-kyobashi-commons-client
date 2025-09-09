@@ -115,7 +115,7 @@ export const api = createApi({
 
     updateCrewSettings: build.mutation<
       Crew,
-      { cognitoId: string } & Partial<Crew>
+      { cognitoId?: string } & Partial<Crew>
     >({
       query: ({ cognitoId, ...updatedCrew }) => ({
         url: `crews/${cognitoId}`,
@@ -133,7 +133,7 @@ export const api = createApi({
 
     updateTrusteeSettings: build.mutation<
       Trustee,
-      { cognitoId: string } & Partial<Trustee>
+      { cognitoId?: string } & Partial<Trustee>
     >({
       query: ({ cognitoId, ...updatedTrustee }) => ({
         url: `trustees/${cognitoId}`,

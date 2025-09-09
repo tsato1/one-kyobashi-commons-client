@@ -77,8 +77,7 @@ export const createNewUserInDatabase = async (
   userRole: string,
   fetchWithBQ: any
 ) => {
-  const createEndpoint =
-    userRole?.toLowerCase() === "trustee" ? "/trustees" : "/crews";
+  const createEndpoint = userRole?.toLowerCase() === "trustee" ? "/trustees" : "/crews";
 
   const createUserResponse = await fetchWithBQ({
     url: createEndpoint,
@@ -87,7 +86,6 @@ export const createNewUserInDatabase = async (
       cognitoId: user.userId,
       name: user.username,
       email: idToken?.payload?.email || "",
-      phoneNumber: "",
     },
   });
 

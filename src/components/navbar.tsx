@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image"
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "aws-amplify/auth";
 import { BellIcon, MenuIcon, MessageCircleIcon } from "lucide-react";
@@ -39,6 +40,7 @@ interface NavbarProps {
 export const Navbar = ({
   locale = 'en'
 }: NavbarProps) => {
+  const t = useTranslations("common.auth");
   const { data: authUser } = useGetAuthUserQuery();
   const router = useRouter();
   const pathname = usePathname();
@@ -79,59 +81,61 @@ export const Navbar = ({
           fill />
       </Link>
 
-      {navbarData.map((item, index) => (
-        <div
-          key={index}
-          className="w-20 hidden md:block mr-2 cursor-pointer hover:font-bold text-center"
-          onClick={() => { }}
-        >
-          <Link href={item.href}>
-            {item.title}
-          </Link>
-        </div>
-      ))}
+      <div className="flex flex-1 items-center justify-center gap-3">
+        {!isDashboardPage && navbarData.map((item, index) => (
+          <div
+            key={index}
+            className="w-24 hidden md:block mr-2 cursor-pointer hover:font-bold text-center"
+            onClick={() => { }}
+          >
+            <Link href={item.href}>
+              {item.title}
+            </Link>
+          </div>
+        ))}
+      </div>
 
-      <div className="flex items-center gap-5">
+      <div className="flex items-center">
         {authUser ? (
-          <>
-            <div className="relative hidden md:block">
-              <MessageCircleIcon className="w-6 h-6 cursor-pointer text-primary-200 hover:text-primary-400" />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
+          <div className="flex items-center justify-around gap-2 sm:gap-4">
+            {/* <div className="relative hidden md:block hover:opacity-60 cursor-pointer">
+              <MessageCircleIcon className="w-6 h-6 text-accent" />
+              <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
             </div>
-            <div className="relative hidden md:block">
-              <BellIcon className="w-6 h-6 cursor-pointer text-primary-200 hover:text-primary-400" />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
-            </div>
+            <div className="relative hidden md:block hover:opacity-60 cursor-pointer">
+              <BellIcon className="w-6 h-6 text-accent" />
+              <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
+            </div> */}
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none">
-                <Avatar>
+              <DropdownMenuTrigger className="flex items-center focus:outline-none cursor-pointer hover:opacity-60">
+                <Avatar className="size-9 border-2 z-10">
                   <AvatarImage src={authUser.userInfo?.image} />
-                  <AvatarFallback className="bg-primary-600">
-                    {authUser.userRole?.[0].toUpperCase()}
+                  <AvatarFallback className="bg-primary">
+                    {authUser.cognitoInfo?.username?.[0].toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <p className="text-primary-200 hidden md:block">
-                  {authUser.userInfo?.name}
+                <p className="max-w-24 hidden md:block rounded-r-full pr-3 pl-4 -translate-x-2 py-0.5 border-r border-t border-b text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
+                  {authUser.cognitoInfo?.username}
                 </p>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-white text-primary-700">
+              <DropdownMenuContent className="bg-white text-accent">
                 <DropdownMenuItem
-                  className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100 font-bold"
+                  className="cursor-pointer font-bold"
                   onClick={() =>
                     router.push(
                       authUser.userRole?.toLowerCase() === "trustee"
-                        ? "/trustee/properties"
-                        : "/crews/favorites",
+                        ? "/trustees/dashboard"
+                        : "/crews/dashboard",
                       { scroll: false }
                     )
                   }
                 >
-                  Go to Dashboard
+                  {t("goToDashboard")}
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-primary-200" />
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100"
+                  className="cursor-pointer"
                   onClick={() =>
                     router.push(
                       `/${authUser.userRole?.toLowerCase()}s/settings`,
@@ -139,48 +143,51 @@ export const Navbar = ({
                     )
                   }
                 >
-                  Settings
+                  {t("settings")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100"
+                  className="cursor-pointer"
                   onClick={handleSignOut}
                 >
-                  Sign out
+                  {t("signOut")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="flex items-center gap-1 sm:gap-2 mr-2 sm:mr-4">
             <Link href="/signin">
               <Button
-                variant="outline"
-                className="border-white bg-transparent hover:text-primary-700 rounded-lg"
+                variant="secondary"
+                className="bg-primary hover:bg-primary/20 border border-primary text-accent hover:text-primary-foreground rounded-lg"
+                onClick={() => router.push("/signin")}
               >
-                Sign In
+                {t("signIn")}
               </Button>
             </Link>
             <Link href="/signup">
               <Button
-                variant="secondary"
-                className="bg-secondary-600 hover:text-primary-700 rounded-lg"
+                variant="outline"
+                className="hover:bg-accent/10 border border-primary hover:text-primary-foreground rounded-lg"
               >
-                Sign Up
+                {t("signUp")}
               </Button>
             </Link>
-          </>
+          </div>
         )}
       </div>
 
-      <div className="hidden md:block">
-        <LanguageSelect locale={locale} />
-      </div>
+      {!isDashboardPage && (
+        <div className="hidden md:block">
+          <LanguageSelect locale={locale} />
+        </div>
+      )}
 
       {/* For Mobile */}
       <Button
         variant="ghost"
         size="icon"
-        className="md:hidden cursor-pointer hover:bg-zinc-300"
+        className="md:hidden hover:bg-zinc-300"
         onClick={() => openMobileNavbar()}
       >
         <MenuIcon className="size-4" />
