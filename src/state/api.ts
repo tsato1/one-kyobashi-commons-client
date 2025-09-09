@@ -113,13 +113,31 @@ export const api = createApi({
       },
     }),
 
+    createEvent: build.mutation<Event, FormData>({
+      query: (newEvent) => ({
+        url: `events`,
+        method: "POST",
+        body: newEvent,
+      }),
+      invalidatesTags: (result) => [
+        { type: "Events", id: "LIST" },
+        { type: "Crews", id: result?.crew?.id },
+      ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "Event created successfully!",
+          error: "Failed to create event.",
+        });
+      },
+    }),
+
     updateCrewSettings: build.mutation<
       Crew,
       { cognitoId?: string } & Partial<Crew>
     >({
       query: ({ cognitoId, ...updatedCrew }) => ({
         url: `crews/${cognitoId}`,
-        method: "PUT",
+        method: "PATCH",
         body: updatedCrew,
       }),
       invalidatesTags: (result) => [{ type: "Crews", id: result?.id }],
@@ -137,7 +155,7 @@ export const api = createApi({
     >({
       query: ({ cognitoId, ...updatedTrustee }) => ({
         url: `trustees/${cognitoId}`,
-        method: "PUT",
+        method: "PATCH",
         body: updatedTrustee,
       }),
       invalidatesTags: (result) => [{ type: "Trustees", id: result?.id }],
@@ -145,24 +163,6 @@ export const api = createApi({
         await withToast(queryFulfilled, {
           success: "Settings updated successfully!",
           error: "Failed to update settings.",
-        });
-      },
-    }),
-
-    createEvent: build.mutation<Event, FormData>({
-      query: (newEvent) => ({
-        url: `events`,
-        method: "POST",
-        body: newEvent,
-      }),
-      invalidatesTags: (result) => [
-        { type: "Events", id: "LIST" },
-        { type: "Crews", id: result?.crew?.id },
-      ],
-      async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          success: "Event created successfully!",
-          error: "Failed to create event.",
         });
       },
     }),
