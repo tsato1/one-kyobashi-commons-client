@@ -14,8 +14,8 @@ const CrewSettings = () => {
   if (isLoading) return <>Loading...</>;
 
   const initialData = {
-    name: authUser?.userInfo.name,
-    email: authUser?.userInfo.email,
+    name: authUser?.userInfo?.name,
+    email: authUser?.userInfo?.email,
   };
 
   const handleSubmit = async (data: SettingsFormData) => {
