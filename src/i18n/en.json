@@ -15,30 +15,6 @@
       "commerceDisclosure": "Commerce Disclosure"
     }
   },
-  "private": {
-    "crews": {
-      "dashboard": {
-        "caption": "You are a crew member!"
-      }
-    },
-    "trustees": {
-      "dashboard": {
-        "caption": "You are a trustee member!"
-      }
-    },
-    "common":{ 
-      "appSidebar": {
-        "titleCrew": "Crew View",
-        "titleTrustee": "Trustee View",
-        "dashboard": "Dashboard",
-        "events": "Events",
-        "shop": "Shop",
-        "revenue": "Revenue",
-        "applications": "Applications",
-        "settings": "Settings"
-      }
-    }
-  },
   "common": {
     "auth": {
       "signIn": "Sign In",

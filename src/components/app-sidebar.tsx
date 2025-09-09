@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
 import {
   BuildingIcon,
   DollarSignIcon,
@@ -31,31 +30,24 @@ interface AppSidebarProps {
 }
 
 export const AppSidebar = ({ userRole }: AppSidebarProps) => {
-  const t = useTranslations("private.common.appSidebar");
   const pathname = usePathname();
   const { toggleSidebar, open } = useSidebar();
 
   const navLinks =
     userRole === "trustee"
       ? [
-        { icon: BuildingIcon, label: "dashboard", href: "/trustees/dashboard" },
-        {
-          icon: FileTextIcon,
-          label: "applications",
-          href: "/trustees/applications",
-        },
-        { icon: SettingsIcon, label: "settings", href: "/trustees/settings" },
+        { icon: BuildingIcon, label: "ダッシュボード", href: "/trustees/dashboard" },
+        { icon: FileTextIcon, label: "イベント", href: "/crews/events" },
+        { icon: HomeIcon, label: "ショップ", href: "/crews/shop" },
+        { icon: DollarSignIcon, label: "売上", href: "/crews/revenue" },
+        { icon: SettingsIcon, label: "設定", href: "/trustees/settings" },
       ]
       : [
-        { icon: HeartIcon, label: "dashboard", href: "/crews/dashboard" },
-        {
-          icon: FileTextIcon,
-          label: "events",
-          href: "/crews/events",
-        },
-        { icon: HomeIcon, label: "shop", href: "/crews/shop" },
-        { icon: DollarSignIcon, label: "revenue", href: "/crews/revenue" },
-        { icon: SettingsIcon, label: "settings", href: "/crews/settings" },
+        { icon: HeartIcon, label: "ダッシュボード", href: "/crews/dashboard" },
+        { icon: FileTextIcon, label: "イベント", href: "/crews/events" },
+        { icon: HomeIcon, label: "ショップ", href: "/crews/shop" },
+        { icon: DollarSignIcon, label: "売上", href: "/crews/revenue" },
+        { icon: SettingsIcon, label: "設定", href: "/crews/settings" },
       ];
 
   return (
@@ -75,7 +67,7 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
               {open ? (
                 <>
                   <h1 className="text-xl font-bold text-gray-700">
-                    {userRole === "trustee" ? t("titleTrustee") : t("titleCrew")}
+                    {userRole === "trustee" ? "一味" : "クルー"}
                   </h1>
                   <Button
                     variant="ghost"
@@ -114,14 +106,14 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
                       : "",
                     open ? "" : "ml-[6px]"
                   )}
-                  tooltip={t(link.label)}
+                  tooltip={link.label}
                 >
                   <Link href={link.href} className="w-full" scroll={false}>
                     <div className="flex items-center gap-3 shrink-0">
                       <link.icon className={`h-5 w-5 ${isActive ? "text-primary-foreground" : ""}`} />
                       {open && (
                         <span className={`font-medium ${isActive ? "text-primary-foreground" : ""}`}>
-                          {t(link.label)}
+                          {link.label}
                         </span>
                       )}
                     </div>
