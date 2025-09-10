@@ -53,7 +53,7 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
   return (
     <Sidebar
       collapsible="icon"
-      className="fixed left-0 shadow-lg pt-16 sm:pt-20"
+      className="fixed left-0 shadow-lg"
     >
       <SidebarHeader>
         <SidebarMenu>
