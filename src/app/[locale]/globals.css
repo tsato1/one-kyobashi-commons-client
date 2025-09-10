@@ -121,16 +121,6 @@
   }
 }
 
-section {
-  padding-block: calc(var(--spacing) * 20);
-}
-
-@media (min-width: 40rem) {
-  section {
-    padding-block: calc(var(--spacing) * 40);
-  }
-}
-
 /* Amplify UI Overrides */
 [data-amplify-authenticator] .amplify-tabs__list {
   display: none;

@@ -7,8 +7,8 @@ export const Footer = async () => {
   const t = await getTranslations("main.footer")
 
   return (
-    <footer className='w-full h-60 flex flex-col items-center justify-center px-4 text-center text-gray-800 space-y-2'>
-      <div className='flex flex-col my-6'>
+    <footer className='w-full h-60 flex flex-col items-center justify-center py-20 sm:py-40 px-4 text-center text-gray-800 space-y-2'>
+      <div className='flex flex-col'>
         <Link href="/terms-of-service">
           <span className='text-sm'>{t("termsOfService")}</span>
         </Link>

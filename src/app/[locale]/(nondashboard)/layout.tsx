@@ -19,12 +19,10 @@ const Layout = async ({
 
   return (
     <NonDashboardAuthProvider>
-      <div className="h-full w-full">
-        <Navbar locale={locale} />
-        <main className={`h-full flex w-full flex-col pt-16 sm:pt-20`}>
-          {children}
-        </main>
-      </div>
+      <Navbar locale={locale} />
+      <main className="h-full flex w-full flex-col pt-16 sm:pt-20">
+        {children}
+      </main>
     </NonDashboardAuthProvider>
   );
 };
