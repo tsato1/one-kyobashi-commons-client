@@ -36,6 +36,7 @@ import { sidebarData } from "@/constants/navbar-data";
 import { cn } from "@/lib/utils";
 import { useGetAuthUserQuery } from "@/state/api";
 import { ErrorComponent } from "@/components/error-component";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const AppSidebar = () => {
   const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
@@ -101,7 +102,7 @@ export const AppSidebar = () => {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent className={open ? "mx-2" : "mx-0"}>
+      <SidebarContent className={open ? "px-2" : "px-0"}>
         <SidebarMenu>
           {sidebarData.map((link) => {
             const isActive = pathname.includes(link.href);
@@ -143,31 +144,33 @@ export const AppSidebar = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild className="h-14 focus:outline-none cursor-pointer">
-                <SidebarMenuButton className="mb-7">
-                  {authLoading ? (
-                    <>Loading...</>
+              <DropdownMenuTrigger asChild className="w-full h-14 focus:outline-none cursor-pointer p-0 mb-8">
+                {authLoading ? (
+                  <Skeleton className={`${open ? "h-14 w-full" : "h-10 w-10 -translate-x-1"}`} />
+                ) : (
+                  authUser ? (
+                    <SidebarMenuButton className="flex items-center justify-center p-2">
+                      <Avatar className={cn("border-2", open ? "size-9" : "size-7")}>
+                        <AvatarImage src={authUser.userInfo?.image} />
+                        <AvatarFallback className="bg-primary">
+                          {authUser.cognitoInfo?.username?.[0].toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      {open && (
+                        <>
+                          <p className="hidden md:block py-0.5 text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
+                            {authUser.cognitoInfo?.username}
+                          </p>
+                          <ChevronRightIcon className="ml-auto" />
+                        </>
+                      )}
+                    </SidebarMenuButton>
                   ) : (
-                    authUser ? (
-                      <>
-                        <Avatar className="size-9 border-2">
-                          <AvatarImage src={authUser.userInfo?.image} />
-                          <AvatarFallback className="bg-primary">
-                            {authUser.cognitoInfo?.username?.[0].toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <p className="hidden md:block py-0.5 text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
-                          {authUser.cognitoInfo?.username}
-                        </p>
-                        <ChevronRightIcon className="ml-auto" />
-                      </>
-                    ) : (
-                      <>
-                        ユーザをロードできません
-                      </>
-                    )
-                  )}
-                </SidebarMenuButton>
+                    <>
+                      ユーザをロードできません
+                    </>
+                  )
+                )}
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 side="right"
