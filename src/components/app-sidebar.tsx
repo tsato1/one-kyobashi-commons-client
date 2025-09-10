@@ -1,59 +1,64 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "aws-amplify/auth";
 import {
-  BuildingIcon,
-  DollarSignIcon,
-  FileTextIcon,
-  HeartIcon,
-  HomeIcon,
+  ChevronRightIcon,
   MenuIcon,
-  SettingsIcon,
   X,
 } from "lucide-react";
 
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage
+} from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
+import { sidebarData } from "@/constants/navbar-data";
 import { cn } from "@/lib/utils";
+import { useGetAuthUserQuery } from "@/state/api";
+import { ErrorComponent } from "@/components/error-component";
 
 interface AppSidebarProps {
   userRole: "trustee" | "crew";
 }
 
 export const AppSidebar = ({ userRole }: AppSidebarProps) => {
+  const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
   const pathname = usePathname();
+  const router = useRouter();
   const { toggleSidebar, open } = useSidebar();
 
-  const navLinks =
-    userRole === "trustee"
-      ? [
-        { icon: BuildingIcon, label: "ダッシュボード", href: "/trustees/dashboard" },
-        { icon: FileTextIcon, label: "イベント", href: "/crews/events" },
-        { icon: HomeIcon, label: "ショップ", href: "/crews/shop" },
-        { icon: DollarSignIcon, label: "売上", href: "/crews/revenue" },
-        { icon: SettingsIcon, label: "設定", href: "/trustees/settings" },
-      ]
-      : [
-        { icon: HeartIcon, label: "ダッシュボード", href: "/crews/dashboard" },
-        { icon: FileTextIcon, label: "イベント", href: "/crews/events" },
-        { icon: HomeIcon, label: "ショップ", href: "/crews/shop" },
-        { icon: DollarSignIcon, label: "売上", href: "/crews/revenue" },
-        { icon: SettingsIcon, label: "設定", href: "/crews/settings" },
-      ];
+  const handleSignOut = async () => {
+    await signOut();
+    window.location.href = "/";
+  };
+
+  if (!authUser || !authUser.userRole) {
+    return <ErrorComponent message="ユーザデータが取得できませんでした。" />
+  }
 
   return (
     <Sidebar
       collapsible="icon"
-      className="fixed left-0 shadow-lg"
+      className="fixed shadow-lg"
     >
       <SidebarHeader>
         <SidebarMenu>
@@ -92,7 +97,7 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
 
       <SidebarContent>
         <SidebarMenu>
-          {navLinks.map((link) => {
+          {sidebarData.map((link) => {
             const isActive = pathname.includes(link.href);
 
             return (
@@ -108,7 +113,10 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
                   )}
                   tooltip={link.label}
                 >
-                  <Link href={link.href} className="w-full" scroll={false}>
+                  <Link
+                    href={link.href.replace(":role", `${authUser.userRole?.toLowerCase()}s`)}
+                    className="w-full" scroll={false}
+                  >
                     <div className="flex items-center gap-3 shrink-0">
                       <link.icon className={`h-5 w-5 ${isActive ? "text-primary-foreground" : ""}`} />
                       {open && (
@@ -124,6 +132,58 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
           })}
         </SidebarMenu>
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="h-14 focus:outline-none cursor-pointer">
+                <SidebarMenuButton className="mb-7">
+                  {authLoading ? (
+                    <>Loading...</>
+                  ) : (
+                    authUser ? (
+                      <>
+                        <Avatar className="size-9 border-2">
+                          <AvatarImage src={authUser.userInfo?.image} />
+                          <AvatarFallback className="bg-primary">
+                            {authUser.cognitoInfo?.username?.[0].toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <p className="hidden md:block py-0.5 text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
+                          {authUser.cognitoInfo?.username}
+                        </p>
+                        <ChevronRightIcon className="ml-auto" />
+                      </>
+                    ) : (
+                      <>
+                        ユーザをロードできません
+                      </>
+                    )
+                  )}
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side="right"
+                align="end"
+                className="w-[--radix-popper-anchor-width]"
+              >
+                <DropdownMenuItem onClick={() =>
+                  router.push(
+                    `/${authUser.userRole?.toLowerCase()}s/settings`,
+                    { scroll: false }
+                  )
+                }>
+                  設定
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut}>
+                  サインアウト
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 };
