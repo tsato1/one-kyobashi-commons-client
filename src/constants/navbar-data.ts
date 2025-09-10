@@ -1,7 +1,7 @@
 export const navbarData = [
   {
-    title: "MENU",
-    href: "#menu",
+    title: "EVENTS",
+    href: "#events",
   },
   {
     title: "ABOUT US",
@@ -9,6 +9,6 @@ export const navbarData = [
   },
   {
     title: "CONTACT",
-    href: "/contact",
+    href: "#contact",
   }
 ]
