@@ -60,7 +60,7 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
           <SidebarMenuItem>
             <div
               className={cn(
-                "flex min-h-[56px] w-full items-center pt-3 mb-3",
+                "flex w-full items-center pt-3 mb-3",
                 open ? "justify-between px-6" : "justify-center"
               )}
             >
@@ -102,7 +102,7 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
                   className={cn(
                     "flex items-center px-7 py-7",
                     isActive
-                      ? "bg-secondary hover:bg-muted"
+                      ? "bg-secondary hover:bg-secondary/60"
                       : "",
                     open ? "" : "ml-[6px]"
                   )}
