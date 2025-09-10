@@ -71,7 +71,7 @@ export const AppSidebar = () => {
                 <>
                   <div
                     role="button"
-                    className="w-full flex items-center gap-3 cursor-pointer hover:bg-muted px-6 py-2 rounded-2xl"
+                    className="w-full flex items-center gap-3 cursor-pointer hover:bg-muted px-6 rounded-2xl"
                     onClick={() => router.push("/")}
                   >
                     <Image
