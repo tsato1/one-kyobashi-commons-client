@@ -103,7 +103,7 @@ export const api = createApi({
       },
     }),
 
-    getEvent: build.query<Event, number>({
+    getEvent: build.query<Event, string>({
       query: (id) => `events/${id}`,
       providesTags: (result, error, id) => [{ type: "EventDetails", id }],
       async onQueryStarted(_, { queryFulfilled }) {
