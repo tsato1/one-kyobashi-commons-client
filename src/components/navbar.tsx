@@ -70,7 +70,7 @@ export const Navbar = ({
       )}
 
       <Link
-        href="#hero"
+        href="/"
         className="relative w-48 sm:w-52 h-12 sm:h-16 mr-auto cursor-pointer"
       >
         <Image
