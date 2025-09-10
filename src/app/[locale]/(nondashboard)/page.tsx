@@ -6,7 +6,7 @@ import { Events } from "./_sections/events";
 
 export default async function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center overflow-hidden">
+    <main className="flex flex-col items-center overflow-hidden">
       <Hero />
 
       <Sponsors />
