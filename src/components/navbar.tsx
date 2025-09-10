@@ -32,6 +32,7 @@ import { navbarData } from "@/constants/navbar-data";
 import { localeToCountryCode, localeToLanguageString, Locale } from "@/lib/utils"
 import { useMySheet } from "@/hooks/use-my-sheet";
 import { useGetAuthUserQuery } from "@/state/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface NavbarProps {
   locale: string;
@@ -41,7 +42,7 @@ export const Navbar = ({
   locale = 'en'
 }: NavbarProps) => {
   const t = useTranslations("common.auth");
-  const { data: authUser } = useGetAuthUserQuery();
+  const { data: authUser, isLoading } = useGetAuthUserQuery();
   const router = useRouter();
   const pathname = usePathname();
   const { onOpen } = useMySheet();
@@ -96,84 +97,91 @@ export const Navbar = ({
       </div>
 
       <div className="flex items-center">
-        {authUser ? (
-          <div className="flex items-center justify-around gap-2 sm:gap-4">
-            {/* <div className="relative hidden md:block hover:opacity-60 cursor-pointer">
-              <MessageCircleIcon className="w-6 h-6 text-accent" />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
-            </div>
-            <div className="relative hidden md:block hover:opacity-60 cursor-pointer">
-              <BellIcon className="w-6 h-6 text-accent" />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
-            </div> */}
-
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center focus:outline-none cursor-pointer hover:opacity-60">
-                <Avatar className="size-9 border-2 z-10">
-                  <AvatarImage src={authUser.userInfo?.image} />
-                  <AvatarFallback className="bg-primary">
-                    {authUser.cognitoInfo?.username?.[0].toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <p className="max-w-24 hidden md:block rounded-r-full pr-3 pl-4 -translate-x-2 py-0.5 border-r border-t border-b text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
-                  {authUser.cognitoInfo?.username}
-                </p>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-white text-accent">
-                <DropdownMenuItem
-                  className="cursor-pointer font-bold"
-                  onClick={() =>
-                    router.push(
-                      authUser.userRole?.toLowerCase() === "trustee"
-                        ? "/trustees/dashboard"
-                        : "/crews/dashboard",
-                      { scroll: false }
-                    )
-                  }
-                >
-                  {t("goToDashboard")}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() =>
-                    router.push(
-                      `/${authUser.userRole?.toLowerCase()}s/settings`,
-                      { scroll: false }
-                    )
-                  }
-                >
-                  {t("settings")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={handleSignOut}
-                >
-                  {t("signOut")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+        {isLoading ? (
+          <>
+            <Skeleton className="w-22 h-9 bg-accent-foreground rounded-lg mr-2 sm:mr-4" />
+            <Skeleton className="w-22 h-9 bg-accent-foreground rounded-lg mr-2 sm:mr-4" />
+          </>
         ) : (
-          <div className="flex items-center gap-1 sm:gap-2 mr-2 sm:mr-4">
-            <Link href="/signin">
-              <Button
-                variant="secondary"
-                className="bg-primary hover:bg-primary/20 border border-primary text-accent hover:text-primary-foreground rounded-lg"
-                onClick={() => router.push("/signin")}
-              >
-                {t("signIn")}
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button
-                variant="outline"
-                className="hover:bg-accent/10 border border-primary hover:text-primary-foreground rounded-lg"
-              >
-                {t("signUp")}
-              </Button>
-            </Link>
-          </div>
+          authUser ? (
+            <div className="flex items-center justify-around gap-2 sm:gap-4">
+              {/* <div className="relative hidden md:block hover:opacity-60 cursor-pointer">
+                <MessageCircleIcon className="w-6 h-6 text-accent" />
+                <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
+              </div>
+              <div className="relative hidden md:block hover:opacity-60 cursor-pointer">
+                <BellIcon className="w-6 h-6 text-accent" />
+                <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
+              </div> */}
+
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center focus:outline-none cursor-pointer hover:opacity-60">
+                  <Avatar className="size-9 border-2 z-10">
+                    <AvatarImage src={authUser.userInfo?.image} />
+                    <AvatarFallback className="bg-primary">
+                      {authUser.cognitoInfo?.username?.[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <p className="max-w-24 hidden md:block rounded-r-full pr-3 pl-4 -translate-x-2 py-0.5 border-r border-t border-b text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
+                    {authUser.cognitoInfo?.username}
+                  </p>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-white text-accent">
+                  <DropdownMenuItem
+                    className="cursor-pointer font-bold"
+                    onClick={() =>
+                      router.push(
+                        authUser.userRole?.toLowerCase() === "trustee"
+                          ? "/trustees/dashboard"
+                          : "/crews/dashboard",
+                        { scroll: false }
+                      )
+                    }
+                  >
+                    {t("goToDashboard")}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() =>
+                      router.push(
+                        `/${authUser.userRole?.toLowerCase()}s/settings`,
+                        { scroll: false }
+                      )
+                    }
+                  >
+                    {t("settings")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleSignOut}
+                  >
+                    {t("signOut")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1 sm:gap-2 mr-2 sm:mr-4">
+              <Link href="/signin">
+                <Button
+                  variant="secondary"
+                  className="bg-primary hover:bg-primary/20 border border-primary text-accent hover:text-primary-foreground rounded-lg"
+                  onClick={() => router.push("/signin")}
+                >
+                  {t("signIn")}
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button
+                  variant="outline"
+                  className="hover:bg-accent/10 border border-primary hover:text-primary-foreground rounded-lg"
+                >
+                  {t("signUp")}
+                </Button>
+              </Link>
+            </div>
+          )
         )}
       </div>
 
