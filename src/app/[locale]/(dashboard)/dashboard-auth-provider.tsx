@@ -9,10 +9,8 @@ import { ErrorComponent } from "@/components/error-component";
 import { useGetAuthUserQuery } from "@/state/api";
 
 export function DashboardAuthProvider({
-  locale,
   children
 }: {
-  locale: "en" | "ja"
   children: React.ReactNode
 }) {
   const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
@@ -53,9 +51,7 @@ export function DashboardAuthProvider({
   }
 
   if (!authUser?.userRole) {
-    return (
-      <ErrorComponent message={locale === "ja" ? "ユーザロールが見つかりません" : "Your user role not found."} />
-    )
+    return <ErrorComponent />
   }
 
   return (

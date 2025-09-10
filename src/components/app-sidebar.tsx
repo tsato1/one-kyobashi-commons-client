@@ -50,7 +50,7 @@ export const AppSidebar = () => {
   };
 
   if (!authUser || !authUser.userRole) {
-    return <ErrorComponent message="ユーザデータが取得できませんでした。" />
+    return <ErrorComponent />
   }
 
   return (
