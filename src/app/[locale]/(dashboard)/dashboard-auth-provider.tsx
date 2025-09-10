@@ -60,7 +60,7 @@ export function DashboardAuthProvider({
 
   return (
     <SidebarProvider>
-      <AppSidebar userRole={authUser.userRole.toLowerCase()} />
+      <AppSidebar />
       <>{children}</>
     </SidebarProvider>
   )

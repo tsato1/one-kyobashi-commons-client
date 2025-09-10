@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "aws-amplify/auth";
 import {
+  ChevronLeftIcon,
   ChevronRightIcon,
   MenuIcon,
-  X,
 } from "lucide-react";
 
 import {
@@ -36,11 +37,7 @@ import { cn } from "@/lib/utils";
 import { useGetAuthUserQuery } from "@/state/api";
 import { ErrorComponent } from "@/components/error-component";
 
-interface AppSidebarProps {
-  userRole: "trustee" | "crew";
-}
-
-export const AppSidebar = ({ userRole }: AppSidebarProps) => {
+export const AppSidebar = () => {
   const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
   const pathname = usePathname();
   const router = useRouter();
@@ -66,20 +63,29 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
             <div
               className={cn(
                 "flex w-full items-center pt-3 mb-3",
-                open ? "justify-between px-6" : "justify-center"
+                open ? "justify-between" : "justify-center"
               )}
             >
               {open ? (
                 <>
-                  <h1 className="text-xl font-bold text-gray-700">
-                    {userRole === "trustee" ? "一味" : "クルー"}
-                  </h1>
+                  <div
+                    role="button"
+                    className="w-full flex items-center gap-3 cursor-pointer hover:bg-muted px-6 py-2 rounded-2xl"
+                    onClick={() => router.push("/")}
+                  >
+                    <Image
+                      src="/logo.png"
+                      alt="logo"
+                      width={50}
+                      height={50} />
+                    <p>All O.K!</p>
+                  </div>
                   <Button
-                    variant="ghost"
-                    className="hover:text-white"
+                    variant="outline"
+                    className="hover:text-white translate-x-7"
                     onClick={() => toggleSidebar()}
                   >
-                    <X className="h-6 w-6" />
+                    <ChevronLeftIcon className="h-6 w-6" />
                   </Button>
                 </>
               ) : (
@@ -95,7 +101,7 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className={open ? "mx-2" : "mx-0"}>
         <SidebarMenu>
           {sidebarData.map((link) => {
             const isActive = pathname.includes(link.href);
