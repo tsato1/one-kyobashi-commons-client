@@ -8,7 +8,7 @@ export const ErrorComponent = ({
   message
 }: ErrorPageProps) => {
   return (
-    <div className="w-full h-full mt-10">
+    <div className="w-full h-full flex items-center justify-center mt-10">
       <h1>{title}</h1>
       <p>{message}</p>
     </div>
