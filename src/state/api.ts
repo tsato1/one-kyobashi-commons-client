@@ -72,19 +72,14 @@ export const api = createApi({
     >({
       query: (filters) => {
         const params = cleanParams({
+          eventType: filters.eventType,
           location: filters.location,
           priceMin: filters.priceRange?.[0],
           priceMax: filters.priceRange?.[1],
-          beds: filters.beds,
-          baths: filters.baths,
-          eventType: filters.eventType,
-          squareFeetMin: filters.squareFeet?.[0],
-          squareFeetMax: filters.squareFeet?.[1],
-          amenities: filters.amenities?.join(","),
+          dateMin: filters.dateRange?.[0],
+          dateMax: filters.dateRange?.[1],
           availableFrom: filters.availableFrom,
           favoriteIds: filters.favoriteIds?.join(","),
-          latitude: filters.coordinates?.[1],
-          longitude: filters.coordinates?.[0],
         });
 
         return { url: "events", params };
@@ -121,7 +116,7 @@ export const api = createApi({
       }),
       invalidatesTags: (result) => [
         { type: "Events", id: "LIST" },
-        { type: "Crews", id: result?.crew?.id },
+        { type: "Crews", id: result?.user?.userInfo.id },
       ],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {

@@ -1,15 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface FiltersState {
-  location: string;
-  beds: string;
-  baths: string;
   eventType: string;
-  amenities: string[];
+  location: string;
   availableFrom: string;
   priceRange: [number, number] | [null, null];
-  squareFeet: [number, number] | [null, null];
-  coordinates: [number, number];
+  dateRange: [string, string] | [null, null];
 }
 
 interface InitialStateTypes {
@@ -20,15 +16,11 @@ interface InitialStateTypes {
 
 export const initialState: InitialStateTypes = {
   filters: {
-    location: "Los Angeles",
-    beds: "any",
-    baths: "any",
     eventType: "any",
-    amenities: [],
+    location: "Kyobashi",
     availableFrom: "any",
     priceRange: [null, null],
-    squareFeet: [null, null],
-    coordinates: [-118.25, 34.05],
+    dateRange: [null, null]
   },
   isFiltersFullOpen: false,
   viewMode: "grid",

@@ -21,7 +21,6 @@ export const SettingsForm = ({
   onSubmit,
   userRole,
 }: SettingsFormProps) => {
-  const t = useTranslations("common.settings");
   const [editMode, setEditMode] = useState(false);
   const form = useForm<SettingsFormData>({
     resolver: zodResolver(settingsSchema),
@@ -44,10 +43,10 @@ export const SettingsForm = ({
     <div className="pt-8 pb-5 px-8">
       <div className="mb-5">
         <h1 className="text-xl font-semibold">
-          {t("title")}
+          設定
         </h1>
         <p className="text-sm text-gray-500 mt-1">
-          {t("description")}
+          アカウント情報や本アプリの使用方法を設定します
         </p>
       </div>
       <div className="bg-white rounded-xl p-6">

@@ -1,7 +1,10 @@
-const EventsPage = async () => {
+"use client";
+
+const EventsPage = () => {
+
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-10">
-      イベントページ 構築中...
+    <div>
+      {/* todo: list events */}
     </div>
   )
 }

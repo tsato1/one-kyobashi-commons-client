@@ -6,16 +6,16 @@ import StoreProvider from "@/state/redux";
 import { Authenticator } from "@aws-amplify/ui-react";
 import Auth from "./(auth)/auth-provider";
 
-interface ProvidersProps {
+interface MainProviderProps {
   locale: "en" | "ja"
   messages: Record<string, any>
   children: React.ReactNode
 }
-const Providers = ({
+const MainProvider = ({
   locale,
   messages,
   children
-}: ProvidersProps) => {
+}: MainProviderProps) => {
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <StoreProvider>
@@ -27,4 +27,4 @@ const Providers = ({
   );
 };
 
-export default Providers;
+export default MainProvider;

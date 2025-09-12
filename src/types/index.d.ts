@@ -16,11 +16,11 @@ declare global {
     location: string
     startDate: Date
     endDate: Date
-    fee: string
-    adUrl: string
-    photoUrls: string[]
-    crewCognitoId: string
-    crew?: Crew
+    price: string
+    adUrl: string // For advertisement
+    photoUrls: string[] // For records
+    userCognitoId: string
+    user?: User
   }
 
   type Trustee = {
