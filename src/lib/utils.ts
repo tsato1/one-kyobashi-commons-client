@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { notFound } from "next/navigation";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
@@ -55,6 +56,32 @@ type MutationMessages = {
   error: string;
 };
 
+export const withApiError = async <T>(
+  queryFulfilled: Promise<T>,
+  {
+    invalidMessage = "リクエストが正しくありません: 400 - bad request",
+    notFoundMessage = "リソースが見つかりません: 404 - not found",
+    genericMessage = "エラーが発生しました。サポートに問い合わせてください。",
+  } = {}
+) => {
+  try {
+    return await queryFulfilled;
+  } catch (err: any) {
+    const status = err?.error?.status;
+
+    if (status === 400) {
+      toast.error(invalidMessage);
+    } else if (status === 404) {
+      toast.error(notFoundMessage);
+      notFound();
+    } else if (status >= 500) {
+      toast.error(genericMessage);
+    }
+
+    throw err;
+  }
+}
+
 export const withToast = async <T>(
   mutationFn: Promise<T>,
   messages: Partial<MutationMessages>
@@ -66,7 +93,6 @@ export const withToast = async <T>(
     if (success) toast.success(success);
     return result;
   } catch (err) {
-    if (error) toast.error(error);
     throw err;
   }
 };

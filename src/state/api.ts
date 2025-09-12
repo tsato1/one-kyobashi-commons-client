@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils";
+import { cleanParams, createNewUserInDatabase, withApiError, withToast } from "@/lib/utils";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 import { FiltersState } from ".";
@@ -102,9 +102,11 @@ export const api = createApi({
       query: (id) => `events/${id}`,
       providesTags: (result, error, id) => [{ type: "EventDetails", id }],
       async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
+        const promiseWwithToast = withToast(queryFulfilled, {
           error: "Failed to load event details.",
         });
+
+        await withApiError(promiseWwithToast, {});
       },
     }),
 
