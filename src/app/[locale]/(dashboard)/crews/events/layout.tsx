@@ -32,7 +32,7 @@ const EventsPageLayout = ({
           <BreadcrumbList>
             <BreadcrumbItem>
               {pathnameWithoutLocale === "/crews/events" ? (
-                <>イベント</>
+                <BreadcrumbPage>イベント</BreadcrumbPage>
               ) : (
                 <BreadcrumbLink href="/crews/events">イベント</BreadcrumbLink>
               )}
@@ -42,9 +42,9 @@ const EventsPageLayout = ({
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   {pathnameWithoutLocale === "/crews/events/new" ? (
-                    <>new</>
+                    <BreadcrumbPage>new</BreadcrumbPage>
                   ) : (
-                    <BreadcrumbLink href={pathname}>{lastPathSegment}</BreadcrumbLink>
+                    <BreadcrumbPage>{lastPathSegment}</BreadcrumbPage>
                   )}
                 </BreadcrumbItem>
               </>
