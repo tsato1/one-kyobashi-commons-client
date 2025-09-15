@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { cleanParams, createNewUserInDatabase, withApiError, withToast } from "@/lib/utils";
+import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 import { FiltersState } from ".";
@@ -61,7 +61,7 @@ export const api = createApi({
             },
           };
         } catch (error: any) {
-          return { error: error.message || "Could not fetch user data" };
+          return { error: error.message || "ユーザ情報を取得できませんでした。" };
         }
       },
     }),
@@ -93,20 +93,18 @@ export const api = createApi({
           : [{ type: "Events", id: "LIST" }],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
-          error: "Failed to fetch events.",
+          error: "イベントが取得できませんでした。"
         });
       },
     }),
 
-    getEvent: build.query<Event, string>({
+    getEventById: build.query<Event, string>({
       query: (id) => `events/${id}`,
       providesTags: (result, error, id) => [{ type: "EventDetails", id }],
       async onQueryStarted(_, { queryFulfilled }) {
-        const promiseWwithToast = withToast(queryFulfilled, {
-          error: "Failed to load event details.",
+        await withToast(queryFulfilled, {
+          error: "イベントが取得できませんでした。"
         });
-
-        await withApiError(promiseWwithToast, {});
       },
     }),
 
@@ -118,12 +116,12 @@ export const api = createApi({
       }),
       invalidatesTags: (result) => [
         { type: "Events", id: "LIST" },
-        { type: "Crews", id: result?.user?.userInfo.id },
+        { type: "Crews", id: result?.createdBy },
       ],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
-          success: "Event created successfully!",
-          error: "Failed to create event.",
+          success: "イベントを作成しました。",
+          error: "イベントが作成できませんでした。",
         });
       },
     }),
@@ -140,8 +138,8 @@ export const api = createApi({
       invalidatesTags: (result) => [{ type: "Crews", id: result?.id }],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
-          success: "Settings updated successfully!",
-          error: "Failed to update settings.",
+          success: "設定を更新しました。",
+          error: "設定を更新できませんでした。",
         });
       },
     }),
@@ -158,8 +156,8 @@ export const api = createApi({
       invalidatesTags: (result) => [{ type: "Trustees", id: result?.id }],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
-          success: "Settings updated successfully!",
-          error: "Failed to update settings.",
+          success: "設定を更新しました。",
+          error: "設定が更新できませんでした。",
         });
       },
     }),
@@ -169,7 +167,7 @@ export const api = createApi({
       providesTags: ["Payments"],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
-          error: "Failed to fetch payment info.",
+          error: "決済情報が取得できませんでした。",
         });
       },
     }),
@@ -179,7 +177,7 @@ export const api = createApi({
 export const {
   useGetAuthUserQuery,
   useGetEventsQuery,
-  useGetEventQuery,
+  useGetEventByIdQuery,
   useUpdateCrewSettingsMutation,
   useUpdateTrusteeSettingsMutation,
   useCreateEventMutation,
