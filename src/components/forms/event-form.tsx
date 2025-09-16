@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFormData, eventSchema } from "@/lib/schemas";
 import { CustomFormField } from "./custom-form-field";
@@ -33,7 +34,7 @@ export const EventForm = ({
   };
 
   return (
-    <div className="pb-5">
+    <div className="pt-2 pb-5 px-3 sm:px-6">
       <div className="mb-5">
         <h1 className="text-xl font-semibold">
           {initialData ? `イベント - ${initialData.name}` : "新規イベント"}
@@ -51,12 +52,20 @@ export const EventForm = ({
             <CustomFormField
               name="name"
               label="イベント名"
+              initialValue={initialData?.name || ""}
               disabled={isPending} />
             <CustomFormField
               name="description"
               label="詳細"
               type="textarea"
+              initialValue={initialData?.description || ""}
               disabled={isPending} />
+            <Button
+              type="submit"
+              disabled={isPending}
+            >
+              保存
+            </Button>
           </form>
         </Form>
       </div>

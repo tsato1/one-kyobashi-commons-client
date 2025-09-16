@@ -28,7 +28,7 @@ const EventsPageLayout = ({
   return (
     <div className="w-full mt-6.5">
       <div className="flex items-center justify-between">
-        <Breadcrumb className="ml-6">
+        <Breadcrumb className="px-3 sm:px-6">
           <BreadcrumbList>
             <BreadcrumbItem>
               {pathnameWithoutLocale === "/crews/events" ? (
@@ -53,7 +53,10 @@ const EventsPageLayout = ({
         </Breadcrumb>
 
         {pathname.split("/").filter(Boolean).at(-1) === "events" ? (
-          <Button onClick={() => router.push("/crews/events/new")}>
+          <Button
+            onClick={() => router.push("/crews/events/new")}
+            className="mr-6"
+          >
             <PlusIcon />新規作成
           </Button>
         ) : (

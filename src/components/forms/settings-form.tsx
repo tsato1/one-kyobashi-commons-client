@@ -40,7 +40,7 @@ export const SettingsForm = ({
   };
 
   return (
-    <div className="pt-8 pb-5 px-8">
+    <div className="pt-8 pb-5 px-3 sm:px-6">
       <div className="mb-5">
         <h1 className="text-xl font-semibold">
           設定
