@@ -19,7 +19,7 @@ declare global {
     price: string
     adUrl: string // For advertisement
     photoUrls: string[] // For records
-    userCognitoId: string
+    createdBy: string
     user?: User
   }
 

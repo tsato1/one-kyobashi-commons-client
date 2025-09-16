@@ -6,13 +6,13 @@ import { ErrorComponent } from "@/components/error-component";
 import { EventForm } from "@/components/forms/event-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EventFormData } from "@/lib/schemas";
-import { useGetAuthUserQuery, useGetEventQuery } from "@/state/api";
+import { useGetAuthUserQuery, useGetEventByIdQuery } from "@/state/api";
 
 const EventPage = () => {
   const params = useParams<{ id: string }>()
 
   const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
-  const { data: event, isLoading: eventLoading } = useGetEventQuery(params.id)
+  const { data: event, isLoading: eventLoading } = useGetEventByIdQuery(params.id);
   // const [updateEvent] = useUpdateEventMutation(); // todo
 
   if (authLoading || eventLoading) {

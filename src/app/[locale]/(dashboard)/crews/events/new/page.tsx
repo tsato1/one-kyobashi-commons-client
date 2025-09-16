@@ -1,5 +1,8 @@
 "use client";
 
+import { signOut } from "aws-amplify/auth";
+import { toast } from "sonner";
+
 import { ErrorComponent } from "@/components/error-component";
 import { EventForm } from "@/components/forms/event-form";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,8 +26,26 @@ const NewEventPage = () => {
   }
 
   const handleSubmit = async (data: EventFormData) => {
-    // todo
-    // await createEvent({ });
+    if (!authUser?.cognitoInfo?.userId) {
+      toast.error("ユーザIDが見つかりません。ログインし直してください。");
+      setTimeout(async () => {
+        await signOut();
+        window.location.href = "/";
+      }, 1000);
+      return;
+    }
+
+    // todo: validate other inputs
+    if (!data.name || data.name.trim() === "") {
+      // todo: show error on the form
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description || "");
+    formData.append("createdBy", authUser.cognitoInfo.userId);
+    await createEvent(formData);
   };
 
   if (!authUser) {
