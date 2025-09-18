@@ -20,6 +20,8 @@ export const api = createApi({
   tagTypes: [
     "Trustees",
     "Crews",
+    "Meetings",
+    "MeetingDetails",
     "Events",
     "EventDetails",
     "Payments",
@@ -126,6 +128,61 @@ export const api = createApi({
       },
     }),
 
+    getMeetings: build.query<
+      Meeting[],
+      Partial<FiltersState> & { favoriteIds?: number[] }
+    >({
+      query: (filters) => {
+        const params = cleanParams({
+          location: filters.location,
+          dateMin: filters.dateRange?.[0],
+          dateMax: filters.dateRange?.[1],
+        });
+
+        return { url: "meetings", params };
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }) => ({ type: "Meetings" as const, id })),
+            { type: "Meetings", id: "LIST" },
+          ]
+          : [{ type: "Meetings", id: "LIST" }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "ミーティングが取得できませんでした。"
+        });
+      },
+    }),
+
+    getMeetingById: build.query<Meeting, string>({
+      query: (id) => `meetings/${id}`,
+      providesTags: (result, error, id) => [{ type: "MeetingDetails", id }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "ミーティングが取得できませんでした。"
+        });
+      },
+    }),
+
+    createMeeting: build.mutation<Meeting, FormData>({
+      query: (newMeeting) => ({
+        url: `meetings`,
+        method: "POST",
+        body: newMeeting,
+      }),
+      invalidatesTags: (result) => [
+        { type: "Meetings", id: "LIST" },
+        { type: "Crews", id: result?.createdBy },
+      ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "ミーティングを作成しました。",
+          error: "ミーティングが作成できませんでした。",
+        });
+      },
+    }),
+
     updateCrewSettings: build.mutation<
       Crew,
       { cognitoId?: string } & Partial<Crew>
@@ -178,8 +235,11 @@ export const {
   useGetAuthUserQuery,
   useGetEventsQuery,
   useGetEventByIdQuery,
+  useCreateEventMutation,
+  useGetMeetingsQuery,
+  useGetMeetingByIdQuery,
+  useCreateMeetingMutation,
   useUpdateCrewSettingsMutation,
   useUpdateTrusteeSettingsMutation,
-  useCreateEventMutation,
   useGetPaymentsQuery,
 } = api;

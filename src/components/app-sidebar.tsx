@@ -32,13 +32,22 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { sidebarData } from "@/constants/navbar-data";
 import { cn } from "@/lib/utils";
 import { useGetAuthUserQuery } from "@/state/api";
 import { ErrorComponent } from "@/components/error-component";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const AppSidebar = () => {
+interface AppSidebarProps {
+  sidebarData: {
+    icon: React.ComponentType<{ className?: string }>;
+    label: string;
+    href: string;
+  }[];
+}
+
+export const AppSidebar = ({
+  sidebarData
+}: AppSidebarProps) => {
   const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
   const pathname = usePathname();
   const router = useRouter();
