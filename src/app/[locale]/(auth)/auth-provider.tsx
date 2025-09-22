@@ -154,7 +154,7 @@ const Auth = ({
         initialState={pathname.includes("signup") ? "signUp" : "signIn"}
         components={components}
         formFields={locale === "ja" ? formFieldsJa : formFieldsEn}
-      // socialProviders={["google", "apple"]} // todo: configure oauth
+        socialProviders={["google"]}
       >
         {() => <>{children}</>}
       </Authenticator>
