@@ -26,7 +26,21 @@ Amplify.configure({
   Auth: {
     Cognito: {
       userPoolId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_ID!,
-      userPoolClientId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_CLIENT_ID!,
+      userPoolClientId: process.env.NEXT_PUBLIC_AWS_COGNITO_APP_CLIENT_ID!,
+      loginWith: {
+        oauth: {
+          domain: process.env.NEXT_PUBLIC_AWS_COGNITO_DOMAIN!, // e.g., myapp.auth.us-east-1.amazoncognito.com
+          scopes: ["openid", "email"],
+          redirectSignIn: process.env.NODE_ENV === "development"
+            ? ["http://localhost:3000/dashboard"]
+            : [`${process.env.NEXT_PUBLIC_FRONTEND_URL!}/dashboard`],
+          redirectSignOut: process.env.NODE_ENV === "development"
+            ? ["http://localhost:3000/"]
+            : [`${process.env.NEXT_PUBLIC_FRONTEND_URL!}/`],
+          responseType: "code", // Use authorization code grant flow
+          providers: ["Google"],
+        },
+      },
     },
   },
 });
