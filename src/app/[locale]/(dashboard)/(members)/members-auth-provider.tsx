@@ -3,9 +3,13 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { sidebarDataTrustee, sidebarDataCrew } from "@/constants/navbar-data";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { ErrorComponent } from "@/components/error-component";
 import { useGetAuthUserQuery } from "@/state/api";
 
-export function DashboardAuthProvider({
+export function MembersAuthProvider({
   children
 }: {
   children: React.ReactNode
@@ -19,9 +23,7 @@ export function DashboardAuthProvider({
     if (authUser) {
       const userRole = authUser.userRole?.toLowerCase();
 
-      if (!userRole) {
-        router.push("/welcome", { scroll: false });
-      } else if (
+      if (
         (userRole === "trustee" && pathname.startsWith("/crews")) ||
         (userRole === "crew" && pathname.startsWith("/trustees"))
       ) {
@@ -49,5 +51,14 @@ export function DashboardAuthProvider({
     );
   }
 
-  return <>{children}</>;
+  if (!authUser?.userRole) {
+    return <ErrorComponent />
+  }
+
+  return (
+    <SidebarProvider>
+      <AppSidebar sidebarData={authUser.userRole === "trustee" ? sidebarDataTrustee : sidebarDataCrew} />
+      <>{children}</>
+    </SidebarProvider>
+  )
 }

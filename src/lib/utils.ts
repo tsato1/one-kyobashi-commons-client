@@ -84,13 +84,10 @@ export const withToast = async <T>(
 export const createNewUserInDatabase = async (
   user: any,
   idToken: any,
-  userRole: string,
   fetchWithBQ: any
 ) => {
-  const createEndpoint = userRole?.toLowerCase() === "trustee" ? "/trustees" : "/crews";
-
   const createUserResponse = await fetchWithBQ({
-    url: createEndpoint,
+    url: "users",
     method: "POST",
     body: {
       cognitoId: user.userId,
