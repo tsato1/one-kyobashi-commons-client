@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
   ControllerRenderProps,
   FieldValues,
   useFormContext,
-  useFieldArray,
 } from "react-hook-form";
-import { Edit, X, Plus } from "lucide-react";
+import { Locale } from "date-fns";
+import { Edit } from "lucide-react";
 import { registerPlugin } from "filepond";
 import { FilePond } from "react-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -21,7 +21,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -31,6 +30,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DateAndTimePicker } from "@/components/forms/date-and-time-picker";
+import { MultiInputField } from "@/components/multi-input-field";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -46,6 +47,7 @@ interface FormFieldProps {
   | "switch"
   | "password"
   | "file"
+  | "datetime"
   | "multi-input";
   placeholder?: string;
   options?: { value: string; label: string }[];
@@ -57,7 +59,8 @@ interface FormFieldProps {
   disabled?: boolean;
   multiple?: boolean;
   isIcon?: boolean;
-  initialValue?: string | number | boolean | string[];
+  initialValue?: string | number | boolean | string[] | Date;
+  locale?: Locale;
 }
 
 export const CustomFormField: React.FC<FormFieldProps> = ({
@@ -74,6 +77,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
   multiple = false,
   isIcon = false,
   initialValue,
+  locale,
 }) => {
   const { control } = useFormContext();
 
@@ -106,7 +110,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  className={`cursor-pointer hover:!bg-gray-100 hover:!text-customgreys-darkGrey`}
+                  className={`cursor-pointer hover:!bg-gray-100 hover:!text-gray-900`}
                 >
                   {option.label}
                 </SelectItem>
@@ -147,6 +151,16 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             {...field}
             className={`border-gray-200 p-4 ${inputClassName}`}
             disabled={disabled} />
+        );
+      case "datetime":
+        return (
+          <DateAndTimePicker
+            defaultValue={initialValue as Date}
+            name={name}
+            control={control}
+            placeholder={placeholder}
+            locale={locale as Locale}
+            className={`border-gray-200 ${inputClassName}`} />
         );
       case "multi-input":
         return (
@@ -201,62 +215,5 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
           <FormMessage className="text-red-400" />
         </FormItem>
       )} />
-  );
-};
-interface MultiInputFieldProps {
-  name: string;
-  control: any;
-  placeholder?: string;
-  inputClassName?: string;
-}
-
-const MultiInputField: React.FC<MultiInputFieldProps> = ({
-  name,
-  control,
-  placeholder,
-  inputClassName,
-}) => {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name,
-  });
-
-  return (
-    <div className="space-y-2">
-      {fields.map((field, index) => (
-        <div key={field.id} className="flex items-center space-x-2">
-          <FormField
-            control={control}
-            name={`${name}.${index}`}
-            render={({ field }) => (
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder={placeholder}
-                  className={`flex-1 border-none bg-customgreys-darkGrey p-4 ${inputClassName}`} />
-              </FormControl>
-            )} />
-          <Button
-            type="button"
-            onClick={() => remove(index)}
-            variant="ghost"
-            size="icon"
-            className="text-customgreys-dirtyGrey"
-          >
-            <X className="w-4 h-4" />
-          </Button>
-        </div>
-      ))}
-      <Button
-        type="button"
-        onClick={() => append("")}
-        variant="outline"
-        size="sm"
-        className="mt-2 text-customgreys-dirtyGrey"
-      >
-        <Plus className="w-4 h-4 mr-2" />
-        Add Item
-      </Button>
-    </div>
   );
 };
