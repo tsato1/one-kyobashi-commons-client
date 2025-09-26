@@ -5,6 +5,7 @@ declare global {
     id: string
     cognitoId: string
     name: string
+    nickname?: string
     email: string
     image?: string
   }
@@ -62,7 +63,7 @@ declare global {
 
   interface User {
     cognitoInfo: AuthUser;
-    userInfo: Trustee | Crew;
+    userInfo: UserInfo;
     userRole: JsonObject | JsonPrimitive | JsonArray;
   }
 }

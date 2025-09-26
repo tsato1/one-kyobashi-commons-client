@@ -8,20 +8,16 @@ import { I18n } from "aws-amplify/utils"
 import {
   Authenticator,
   Heading,
-  Radio,
-  RadioGroupField,
   translations,
   useAuthenticator,
   View,
 } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
-import { formFieldsEn, formFieldsJa } from "@/constants/auth-field-data";
 import { localePattern } from "@/lib/utils";
 
 I18n.putVocabularies(translations);
 
-// https://docs.amplify.aws/gen1/javascript/tools/libraries/configure-categories/
 Amplify.configure({
   Auth: {
     Cognito: {
@@ -30,7 +26,7 @@ Amplify.configure({
       loginWith: {
         oauth: {
           domain: process.env.NEXT_PUBLIC_AWS_COGNITO_DOMAIN!, // e.g., myapp.auth.us-east-1.amazoncognito.com
-          scopes: ["openid", "email"],
+          scopes: ["openid", "email", "profile"],
           redirectSignIn: process.env.NODE_ENV === "development"
             ? ["http://localhost:3000/welcome"]
             : [`${process.env.NEXT_PUBLIC_FRONTEND_URL!}/welcome`],
@@ -86,31 +82,6 @@ const components = {
     },
   },
   SignUp: {
-    // todo: don't show radio buttons for crew / trustee and register as crew by default
-    // "custom:role": {
-    //   type: "hidden",
-    //   defaultValue: "crew"
-    // },
-    FormFields() {
-      const t = useTranslations("common.auth")
-      const { validationErrors } = useAuthenticator();
-
-      return (
-        <>
-          <Authenticator.SignUp.FormFields />
-          <RadioGroupField
-            legend={t("role")}
-            name="custom:role"
-            errorMessage={validationErrors?.["custom:role"]}
-            hasError={!!validationErrors?.["custom:role"]}
-            isRequired
-          >
-            <Radio value="crew">{t("crew")}</Radio>
-            <Radio value="trustee">{t("trustee")}</Radio>
-          </RadioGroupField>
-        </>
-      );
-    },
     Footer() {
       const t = useTranslations("common.auth")
       const { toSignIn } = useAuthenticator();
@@ -167,7 +138,6 @@ const Auth = ({
       <Authenticator
         initialState={pathname.includes("signup") ? "signUp" : "signIn"}
         components={components}
-        formFields={locale === "ja" ? formFieldsJa : formFieldsEn}
         socialProviders={["google"]}
       >
         {() => <>{children}</>}

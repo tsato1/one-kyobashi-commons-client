@@ -19,7 +19,8 @@ export function DashboardAuthProvider({
     if (authUser) {
       const userRole = authUser.userRole?.toLowerCase();
 
-      if (!userRole) {
+      if (userRole === "guest") {
+        setIsLoading(false);
         router.push("/welcome", { scroll: false });
       } else if (
         (userRole === "trustee" && pathname.startsWith("/crews")) ||

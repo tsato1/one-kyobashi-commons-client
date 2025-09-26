@@ -36,9 +36,13 @@ export const api = createApi({
           const userRole = idToken?.payload["custom:role"] as string;
 
           const endpoint =
-            userRole === "trustee"
-              ? `/trustees/${user.userId}`
-              : `/crews/${user.userId}`;
+            userRole === "admin"
+              ? `/admins/${user.userId}`
+              : userRole === "trustee"
+                ? `/trustees/${user.userId}`
+                : userRole === "crew"
+                  ? `/crews/${user.userId}`
+                  : `/users/${user.userId}`;
 
           let userDetailsResponse = await fetchWithBQ(endpoint);
 
