@@ -4,7 +4,6 @@ declare global {
   interface UserInfo {
     id: string
     cognitoId: string
-    name: string
     nickname?: string
     email: string
     image?: string

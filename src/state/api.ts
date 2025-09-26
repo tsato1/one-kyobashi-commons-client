@@ -61,7 +61,7 @@ export const api = createApi({
           return {
             data: {
               cognitoInfo: { ...user },
-              userInfo: userDetailsResponse.data as Trustee | Crew,
+              userInfo: userDetailsResponse.data as UserInfo,
               userRole,
             },
           };

@@ -112,7 +112,7 @@ const Auth = ({
 }: {
   children: React.ReactNode
 }) => {
-  const { user } = useAuthenticator((context) => [context.user]);
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
@@ -124,10 +124,10 @@ const Auth = ({
   const isDashboardPage = pathname.startsWith("/trustees") || pathname.startsWith("/crews");
 
   useEffect(() => {
-    if (user && isAuthPage) {
-      router.push("/");
+    if (authStatus === "authenticated" && isAuthPage && pathname !== "/welcome") {
+      router.push("/welcome");
     }
-  }, [user, isAuthPage, router]);
+  }, [authStatus, isAuthPage, pathname, router]);
 
   if (!isAuthPage && !isDashboardPage) {
     return <>{children}</>;
