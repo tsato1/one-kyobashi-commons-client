@@ -14,7 +14,7 @@ const TrusteeSettings = () => {
   if (isLoading) return <>Loading...</>;
 
   const initialData = {
-    name: authUser?.userInfo?.name,
+    name: authUser?.userInfo?.nickname, // todo: change name -> nickname
     email: authUser?.userInfo?.email,
   };
 
