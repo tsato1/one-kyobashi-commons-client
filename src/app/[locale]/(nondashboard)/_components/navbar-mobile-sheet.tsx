@@ -4,10 +4,10 @@ import Link from "next/link";
 import { motion } from "motion/react"
 
 import { MySheet } from "@/components/my-sheet";
-import { LanguageSelect } from "@/components/navbar";
 import { Separator } from "@/components/ui/separator";
 import { navbarData } from "@/constants/navbar-data";
 import { useMySheet } from "@/hooks/use-my-sheet"
+import { LanguageSelect } from "./navbar";
 
 export const MobileNavbarSheet = () => {
   const { mySheetType, mySheetData, isOpen, onClose } = useMySheet()

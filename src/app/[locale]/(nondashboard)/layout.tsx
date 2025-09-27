@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 
-import { Navbar } from "@/components/navbar";
 import { routing } from "@/i18n/routing";
+import { Navbar } from "./_components/navbar";
 
 const Layout = async ({
   params,

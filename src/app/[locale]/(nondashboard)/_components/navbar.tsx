@@ -7,7 +7,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "aws-amplify/auth";
 import { BellIcon, MenuIcon, MessageCircleIcon } from "lucide-react";
 
-import { MobileNavbarSheet } from "@/components/navbar-mobile-sheet";
 import {
   Select,
   SelectContent,
@@ -28,11 +27,12 @@ import {
   AvatarImage
 } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { navbarData } from "@/constants/navbar-data";
 import { localeToCountryCode, localeToLanguageString, Locale } from "@/lib/utils"
 import { useMySheet } from "@/hooks/use-my-sheet";
 import { useGetAuthUserQuery } from "@/state/api";
-import { Skeleton } from "@/components/ui/skeleton";
+import { MobileNavbarSheet } from "./navbar-mobile-sheet";
 
 interface NavbarProps {
   locale: string;

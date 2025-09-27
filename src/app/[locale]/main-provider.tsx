@@ -17,7 +17,7 @@ const MainProvider = ({
   children
 }: MainProviderProps) => {
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages} timeZone='Asia/Tokyo'>
       <StoreProvider>
         <Authenticator.Provider>
           <Auth>{children}</Auth>
