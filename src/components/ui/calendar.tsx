@@ -20,9 +20,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-function genMonths(locale: Pick<Locale, 'options' | 'localize' | 'formatLong'>) {
+export function genMonths(locale: Pick<Locale, 'options' | 'localize' | 'formatLong'>) {
   return Array.from({ length: 12 }, (_, i) => ({
-    value: i,
+    value: `${i}`,
     label: format(new Date(2021, i), 'MMMM', { locale }),
   }));
 }
@@ -246,7 +246,7 @@ function Calendar({
                 </SelectTrigger>
                 <SelectContent>
                   {MONTHS.map((month) => (
-                    <SelectItem key={month.value} value={month.value.toString()}>
+                    <SelectItem key={month.value} value={month.value}>
                       {month.label}
                     </SelectItem>
                   ))}
