@@ -32,15 +32,15 @@ import { navbarData } from "@/constants/navbar-data";
 import { localeToCountryCode, localeToLanguageString, Locale } from "@/lib/utils"
 import { useMySheet } from "@/hooks/use-my-sheet";
 import { useGetAuthUserQuery } from "@/state/api";
-import { MobileNavbarSheet } from "./navbar-mobile-sheet";
+import { NavbarLandingMobile } from "./navbar-landing-mobile";
 
-interface NavbarProps {
+interface NavbarLandingProps {
   locale: string;
 }
 
-export const Navbar = ({
+export const NavbarLanding = ({
   locale = 'en'
-}: NavbarProps) => {
+}: NavbarLandingProps) => {
   const t = useTranslations("common.auth");
   const { data: authUser, isLoading } = useGetAuthUserQuery();
   const router = useRouter();
@@ -205,7 +205,7 @@ export const Navbar = ({
         <MenuIcon className="size-4" />
       </Button>
 
-      <MobileNavbarSheet />
+      <NavbarLandingMobile />
     </div>
   )
 }

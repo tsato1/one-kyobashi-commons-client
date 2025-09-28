@@ -7,9 +7,9 @@ import { MySheet } from "@/components/my-sheet";
 import { Separator } from "@/components/ui/separator";
 import { navbarData } from "@/constants/navbar-data";
 import { useMySheet } from "@/hooks/use-my-sheet"
-import { LanguageSelect } from "./navbar";
+import { LanguageSelect } from "./navbar-landing";
 
-export const MobileNavbarSheet = () => {
+export const NavbarLandingMobile = () => {
   const { mySheetType, mySheetData, isOpen, onClose } = useMySheet()
   const isSheetOpen = isOpen && mySheetType === "OpenMobileNavbarSheet"
 
