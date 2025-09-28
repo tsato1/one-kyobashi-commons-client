@@ -20,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -44,6 +45,7 @@ interface FormFieldProps {
   | "textarea"
   | "number"
   | "select"
+  | "checkbox"
   | "switch"
   | "password"
   | "file"
@@ -118,6 +120,18 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             </SelectContent>
           </Select>
         );
+      case "checkbox":
+        return (
+          <div className="flex items-center gap-3">
+            <Checkbox
+              id={name}
+              checked={field.value}
+              onCheckedChange={field.onChange} />
+            <FormLabel htmlFor={name} className={labelClassName}>
+              {label}
+            </FormLabel>
+          </div>
+        )
       case "switch":
         return (
           <div className="flex items-center space-x-2">
@@ -192,7 +206,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
           className={`${type !== "switch" && "rounded-md"
             } relative ${className}`}
         >
-          {type !== "switch" && (
+          {(type !== "checkbox" && type !== "switch") && (
             <div className="flex justify-between items-center">
               <FormLabel className={`text-sm ${labelClassName}`}>
                 {label}
