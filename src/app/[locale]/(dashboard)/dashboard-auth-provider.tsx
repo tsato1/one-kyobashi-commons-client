@@ -36,9 +36,7 @@ export function DashboardAuthProvider({
         setIsLoading(false);
       }
     } else {
-      if (!isLoading) {
-        router.push("/")
-      }
+      router.push("/")
     }
   }, [authUser, router, pathname, isLoading]);
 
