@@ -9,7 +9,7 @@ const DashboardLayout = async ({
   return (
     <main className="w-full flex">
       <DashboardAuthProvider>
-        <div className="flex-grow transition-all duration-300 mx-1 sm:mx-2">
+        <div className="flex-grow transition-all duration-300">
           {children}
         </div>
       </DashboardAuthProvider>
