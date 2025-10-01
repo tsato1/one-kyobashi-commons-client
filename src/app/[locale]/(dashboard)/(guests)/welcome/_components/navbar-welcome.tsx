@@ -5,7 +5,7 @@ import Image from "next/image"
 
 export const NavbarWelcome = () => {
   return (
-    <div className="fixed flex items-center justify-end w-screen h-16 sm:h-20 top-0 z-50">
+    <div className="flex items-center justify-end w-screen h-16 sm:h-20 top-0 z-50">
       <Link
         href="/"
         className="relative w-12 sm:w-16 h-12 sm:h-16 mr-auto cursor-pointer"

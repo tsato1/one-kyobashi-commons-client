@@ -4,9 +4,11 @@ declare global {
   interface UserInfo {
     id: string
     cognitoId: string
-    nickname?: string
     email: string
     image?: string
+    role: "crew" | "trustee"
+    nickname?: string
+    birthMonth?: number
   }
 
   interface Event {

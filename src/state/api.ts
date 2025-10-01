@@ -2,7 +2,7 @@
 import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
-import { FiltersState } from ".";
+import { FiltersState } from "./globaSlice";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -18,6 +18,7 @@ export const api = createApi({
   }),
   reducerPath: "api",
   tagTypes: [
+    "Users",
     "Trustees",
     "Crews",
     "Meetings",
@@ -68,6 +69,24 @@ export const api = createApi({
         } catch (error: any) {
           return { error: error.message || "ユーザ情報を取得できませんでした。" };
         }
+      },
+    }),
+
+    updateUser: build.mutation<
+      UserInfo,
+      { cognitoId?: string } & Partial<User>
+    >({
+      query: ({ cognitoId, ...updatedUser }) => ({
+        url: `users/${cognitoId}`,
+        method: "PATCH",
+        body: updatedUser,
+      }),
+      invalidatesTags: (result) => [{ type: "Users", id: result?.id }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "ユーザ情報を更新しました。",
+          error: "ユーザ情報を更新できませんでした。",
+        });
       },
     }),
 
@@ -236,6 +255,7 @@ export const api = createApi({
 
 export const {
   useGetAuthUserQuery,
+  useUpdateUserMutation,
   useGetEventsQuery,
   useGetEventByIdQuery,
   useCreateEventMutation,

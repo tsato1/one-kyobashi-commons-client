@@ -4,12 +4,14 @@ import { useRef } from "react";
 import { TypedUseSelectorHook, useDispatch, useSelector, Provider } from "react-redux";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import globalReducer from "@/state";
 import { api } from "@/state/api";
+import globalReducer from "./globaSlice";
+import stepperReducer from './onboardStepperSlice';
 
 /* REDUX STORE */
 const rootReducer = combineReducers({
   global: globalReducer,
+  onboardStepper: stepperReducer,
   [api.reducerPath]: api.reducer,
 });
 
