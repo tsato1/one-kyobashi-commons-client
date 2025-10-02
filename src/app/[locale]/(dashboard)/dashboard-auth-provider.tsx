@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { ErrorComponent } from "@/components/error-component";
 import { useGetAuthUserQuery } from "@/state/api";
 
 export function DashboardAuthProvider({
@@ -48,6 +49,10 @@ export function DashboardAuthProvider({
         Loading...
       </div>
     );
+  }
+
+  if (!authUser) {
+    return <ErrorComponent />
   }
 
   return <>{children}</>;
