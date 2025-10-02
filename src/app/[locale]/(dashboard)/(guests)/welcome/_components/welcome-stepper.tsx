@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as React from 'react';
+import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { z } from 'zod';
@@ -34,6 +35,8 @@ interface WelcomeStepperProps {
 export const WelcomeStepper = ({
   locale
 }: WelcomeStepperProps) => {
+  const [isLoading, startTransition] = React.useTransition();
+  const router = useRouter();
   const { data: authUser } = useGetAuthUserQuery();
   const [updateUser] = useUpdateUserMutation();
   const dispatch = useAppDispatch();
@@ -50,11 +53,13 @@ export const WelcomeStepper = ({
     console.log(`Form values for ${stepper.current.id}:`, values);
     if (stepper.isLast) {
       console.log("Data being sent to server", allStepperData)
-      await updateUser({
-        cognitoId: authUser?.cognitoInfo?.userId,
-        ...allStepperData
-      });
-      window.location.reload();
+      startTransition(async () => {
+        await updateUser({
+          cognitoId: authUser?.cognitoInfo?.userId,
+          ...allStepperData
+        });
+        router.refresh();
+      })
     } else {
       dispatch(saveStepperData(values))
       stepper.next();
@@ -130,11 +135,11 @@ export const WelcomeStepper = ({
               variant="secondary"
               type="button"
               onClick={stepper.prev}
-              disabled={stepper.isFirst}
+              disabled={stepper.isFirst || isLoading}
             >
               戻る
             </Button>
-            <Button type="submit">
+            <Button type="submit" disabled={isLoading}>
               {stepper.isLast ? '完了！' : '次へ'}
             </Button>
           </div>
