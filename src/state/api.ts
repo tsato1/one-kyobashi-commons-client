@@ -36,16 +36,7 @@ export const api = createApi({
           const user = await getCurrentUser();
           const userRole = idToken?.payload["custom:role"] as string;
 
-          const endpoint =
-            userRole === "admin"
-              ? `/admins/${user.userId}`
-              : userRole === "trustee"
-                ? `/trustees/${user.userId}`
-                : userRole === "crew"
-                  ? `/crews/${user.userId}`
-                  : `/users/${user.userId}`;
-
-          let userDetailsResponse = await fetchWithBQ(endpoint);
+          let userDetailsResponse = await fetchWithBQ(`/users/${user.userId}`);
 
           // If user doesn't exist, create new user
           if (
