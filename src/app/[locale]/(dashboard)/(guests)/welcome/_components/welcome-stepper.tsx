@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { z } from 'zod';
 import { type Locale } from "date-fns/locale"
-import { CircleQuestionMarkIcon } from 'lucide-react';
 import { firstStepSchema, secondStepSchema } from '@one-kyobashi-commons/shared';
 import { defineStepper } from '@stepperize/react';
 
@@ -58,7 +57,7 @@ export const WelcomeStepper = ({
           cognitoId: authUser?.cognitoInfo?.userId,
           ...allStepperData
         });
-        router.refresh();
+        window.location.reload()
       })
     } else {
       dispatch(saveStepperData(values))
@@ -216,27 +215,6 @@ function InfoComponent({
 
   return (
     <div className="space-y-6 text-start">
-      <div className="space-y-2 border-l-4 border-accent p-2">
-        <CustomFormField
-          name="role"
-          label="あなたの興味のある役割を教えてください"
-          type="select"
-          initialValue={"crew"}
-          options={[
-            { value: "crew", label: "クルー" },
-            { value: "trustee", label: "一味" }
-          ]}
-          disabled={false}
-          className="w-fit" />
-        <div className="flex items-center text-blue-500 cursor-pointer">
-          <CircleQuestionMarkIcon className="w-4 h-4 mr-1" />
-          <p className="text-sm underline underline-offset-4">役割とは</p>
-        </div>
-        <div className="text-xs font-medium text-gray-700">
-          <br />
-          興味に応じて後で自由に変更することができます。
-        </div>
-      </div>
       <div className="space-y-2 border-l-4 border-accent p-2">
         <CustomFormField
           name="nickname"
