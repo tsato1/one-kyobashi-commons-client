@@ -20,7 +20,7 @@ import { WelcomeStepper } from "./_components/welcome-stepper";
 
 const WelcomePage = () => {
   const locale = useLocale();
-  const { data: authUser, isLoading } = useGetAuthUserQuery();
+  const { data: authUser } = useGetAuthUserQuery();
 
   if (!authUser) {
     return <ErrorComponent />
