@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as React from 'react';
-import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { z } from 'zod';
@@ -34,13 +33,12 @@ interface WelcomeStepperProps {
 export const WelcomeStepper = ({
   locale
 }: WelcomeStepperProps) => {
-  const [isLoading, startTransition] = React.useTransition();
-  const router = useRouter();
   const { data: authUser } = useGetAuthUserQuery();
   const [updateUser] = useUpdateUserMutation();
   const dispatch = useAppDispatch();
   const allStepperData = useSelector((state: RootState) => state.onboardStepper);
   const stepper = useStepper();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const form = useForm({
     mode: 'onTouched',
@@ -52,13 +50,12 @@ export const WelcomeStepper = ({
     console.log(`Form values for ${stepper.current.id}:`, values);
     if (stepper.isLast) {
       console.log("Data being sent to server", allStepperData)
-      startTransition(async () => {
-        await updateUser({
-          cognitoId: authUser?.cognitoInfo?.userId,
-          ...allStepperData
-        });
-        window.location.reload()
-      })
+      setIsLoading(true);
+      await updateUser({
+        cognitoId: authUser?.cognitoInfo?.userId,
+        ...allStepperData
+      });
+      window.location.reload();
     } else {
       dispatch(saveStepperData(values))
       stepper.next();
