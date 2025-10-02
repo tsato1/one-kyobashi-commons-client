@@ -29,7 +29,7 @@ const WelcomePage = () => {
   return (
     <div className='w-full sm:w-[600px] mx-auto mb-12'>
       <NavbarWelcome />
-      {!authUser.userInfo.birthMonth ? (
+      {!authUser.userInfo?.birthMonth ? (
         <WelcomeStepper locale={locale === "ja" ? ja : enUS} />
       ) : (
         <Card className="w-full sm:w-[600px] space-y-6">
