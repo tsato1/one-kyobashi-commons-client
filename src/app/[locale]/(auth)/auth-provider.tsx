@@ -125,9 +125,9 @@ const Auth = ({
 
   useEffect(() => {
     if (authStatus === "authenticated" && isAuthPage && pathname !== "/welcome") {
-      router.push("/welcome");
+      router.push(`/${locale}/welcome`);
     }
-  }, [authStatus, isAuthPage, pathname, router]);
+  }, [authStatus, isAuthPage, pathname, router, locale]);
 
   if (!isAuthPage && !isDashboardPage) {
     return <>{children}</>;
