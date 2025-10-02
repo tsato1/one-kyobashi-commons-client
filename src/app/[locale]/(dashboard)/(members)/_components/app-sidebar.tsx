@@ -157,28 +157,22 @@ export const AppSidebar = ({
                 {authLoading ? (
                   <Skeleton className={`${open ? "h-14 w-full" : "h-10 w-10 -translate-x-1"}`} />
                 ) : (
-                  authUser ? (
-                    <SidebarMenuButton className="flex items-center justify-center p-2">
-                      <Avatar className={cn("border-2", open ? "size-9" : "size-7")}>
-                        <AvatarImage src={authUser.userInfo?.image} />
-                        <AvatarFallback className="bg-primary">
-                          {authUser.cognitoInfo?.username?.[0].toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      {open && (
-                        <>
-                          <p className="hidden md:block py-0.5 text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
-                            {authUser.cognitoInfo?.username}
-                          </p>
-                          <ChevronRightIcon className="ml-auto" />
-                        </>
-                      )}
-                    </SidebarMenuButton>
-                  ) : (
-                    <>
-                      ユーザをロードできません
-                    </>
-                  )
+                  <SidebarMenuButton className="flex items-center justify-center p-2">
+                    <Avatar className={cn("border-2", open ? "size-9" : "size-7")}>
+                      <AvatarImage src={authUser.userInfo?.image} />
+                      <AvatarFallback className="bg-primary">
+                        {authUser.userInfo?.nickname?.[0].toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    {open && (
+                      <>
+                        <p className="hidden md:block py-0.5 text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
+                          {authUser.userInfo?.nickname}
+                        </p>
+                        <ChevronRightIcon className="ml-auto" />
+                      </>
+                    )}
+                  </SidebarMenuButton>
                 )}
               </DropdownMenuTrigger>
               <DropdownMenuContent
