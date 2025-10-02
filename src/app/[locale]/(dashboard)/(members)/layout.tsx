@@ -1,3 +1,4 @@
+"use client";
 
 import { ErrorComponent } from "@/components/error-component";
 import { sidebarDataTrustee, sidebarDataCrew } from "@/constants/navbar-data";
