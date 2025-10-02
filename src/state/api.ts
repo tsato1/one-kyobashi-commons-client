@@ -82,12 +82,6 @@ export const api = createApi({
         body: updatedUser,
       }),
       invalidatesTags: (result) => [{ type: "Users", id: result?.id }],
-      async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          success: "ユーザ情報を更新しました。",
-          error: "ユーザ情報を更新できませんでした。",
-        });
-      },
     }),
 
     getEvents: build.query<
