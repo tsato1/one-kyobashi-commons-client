@@ -2,7 +2,7 @@
 import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
-import { FiltersState } from "./globaSlice";
+import { FiltersState } from "./globalSlice";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({

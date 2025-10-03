@@ -5,7 +5,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector, Provider } from "react-
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { api } from "@/state/api";
-import globalReducer from "./globaSlice";
+import globalReducer from "./globalSlice";
 import stepperReducer from './onboardStepperSlice';
 
 /* REDUX STORE */
