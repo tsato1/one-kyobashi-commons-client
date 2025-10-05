@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { z } from "zod";
+import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
+import { meetingResponseSchema } from "@one-kyobashi-commons/shared";
+import { MutateMeeting } from "@/components/forms/meeting-form";
 import { FiltersState } from "./globalSlice";
+
+type MeetingResponse = z.infer<typeof meetingResponseSchema>;
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -136,7 +141,7 @@ export const api = createApi({
     }),
 
     getMeetings: build.query<
-      Meeting[],
+      MeetingResponse[],
       Partial<FiltersState> & { favoriteIds?: number[] }
     >({
       query: (filters) => {
@@ -162,7 +167,7 @@ export const api = createApi({
       },
     }),
 
-    getMeetingById: build.query<Meeting, string>({
+    getMeetingById: build.query<MeetingResponse, string>({
       query: (id) => `meetings/${id}`,
       providesTags: (result, error, id) => [{ type: "MeetingDetails", id }],
       async onQueryStarted(_, { queryFulfilled }) {
@@ -172,15 +177,14 @@ export const api = createApi({
       },
     }),
 
-    createMeeting: build.mutation<Meeting, FormData>({
+    createMeeting: build.mutation<string, MutateMeeting>({
       query: (newMeeting) => ({
         url: `meetings`,
         method: "POST",
         body: newMeeting,
       }),
-      invalidatesTags: (result) => [
+      invalidatesTags: () => [
         { type: "Meetings", id: "LIST" },
-        { type: "Crews", id: result?.createdBy },
       ],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {

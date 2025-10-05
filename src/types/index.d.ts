@@ -25,17 +25,6 @@ declare global {
     user?: User
   }
 
-  interface Meeting {
-    id: string
-    visibility: "Public" | "Private"
-    description: string
-    location: string
-    startDate: Date
-    endDate: Date
-    createdBy: string
-    user?: User
-  }
-
   type Trustee = {
     managedEvents: Event[]
   } & UserInfo

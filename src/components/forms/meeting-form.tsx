@@ -1,38 +1,39 @@
 "use client";
 
 import { useTransition } from "react";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useLocale } from "next-intl";
 import { enUS, ja } from "date-fns/locale";
+import { mutateMeetingSchema } from "@one-kyobashi-commons/shared";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MeetingFormData, meetingSchema } from "@/lib/schemas";
 import { CustomFormField } from "./custom-form-field";
 
+export type MutateMeeting = z.infer<typeof mutateMeetingSchema>;
+
 interface MeetingFormProps {
-  initialData?: MeetingFormData;
-  onSubmit: (data: MeetingFormData) => Promise<void>;
-  userRole: "trustee" | "crew";
+  initialData?: MutateMeeting;
+  onSubmit: (data: MutateMeeting) => Promise<void>;
 }
 
 export const MeetingForm = ({
   initialData,
   onSubmit,
-  userRole,
 }: MeetingFormProps) => {
   const locale = useLocale();
   const dateFnsLocale = locale === "ja" ? ja : enUS
 
   const [isPending, startTransition] = useTransition()
 
-  const form = useForm<MeetingFormData>({
-    resolver: zodResolver(meetingSchema),
+  const form = useForm<MutateMeeting>({
+    resolver: zodResolver(mutateMeetingSchema),
     defaultValues: initialData,
   });
 
-  const handleSubmit = (data: MeetingFormData) => {
+  const handleSubmit = (data: MutateMeeting) => {
     startTransition(async () => {
       await onSubmit(data);
     })
@@ -52,8 +53,19 @@ export const MeetingForm = ({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-6"
+            className="space-y-6 sm:space-y-8"
           >
+            <CustomFormField
+              name="visibility"
+              label="公開タイプ"
+              subLabel="制限を設けずに公開または選択したメンバーに限定公開を選びます"
+              type="select"
+              options={[
+                { value: "public", label: "公開" },
+                { value: "private", label: "限定公開" }
+              ]}
+              initialValue={initialData?.visibility || "private"}
+              disabled={isPending} />
             <CustomFormField
               name="startDate"
               label="開始日時"
@@ -66,22 +78,62 @@ export const MeetingForm = ({
               name="endDate"
               label="終了日時"
               type="datetime"
-              initialValue={initialData?.endDate || undefined}
+              initialValue={initialData?.endDate}
               placeholder="未設定"
               disabled={isPending}
               locale={dateFnsLocale} />
             <CustomFormField
+              name="name"
+              label="名前"
+              initialValue={initialData?.name || ""}
+              disabled={isPending} />
+            <CustomFormField
               name="description"
               label="詳細（議題など）"
               type="textarea"
-              initialValue={initialData?.description || ""}
+              initialValue={initialData?.description}
               disabled={isPending} />
-            <Button
-              type="submit"
-              disabled={isPending}
-            >
-              保存
-            </Button>
+            <CustomFormField
+              name="location"
+              label="場所"
+              type="select"
+              initialValue={initialData?.location || "angler"}
+              options={[{ value: "angler", label: "アングラー (Sameshima Coffee Rostery)" }]}
+              disabled={isPending} />
+            <CustomFormField
+              name="allowedRoles"
+              label="対象者"
+              type="multi-select"
+              options={[
+                { value: "crew", label: "クルー" },
+                { value: "trustee", label: "一味" },
+              ]}
+              initialValue={initialData?.allowedRoles || ["trustee"]}
+              disabled={isPending} />
+            <CustomFormField
+              name="materialUrls"
+              label="資料URL"
+              subLabel="スライドや資料のURLを追加します"
+              type="multi-input"
+              placeholder="https://"
+              initialValue={initialData?.materialUrls || []}
+              buttonLabel="追加"
+              disabled={isPending} />
+            <CustomFormField
+              name="joinUrl"
+              label="オンライン会議URL"
+              subLabel="Google MeetまたはZoomのURLが入力できます"
+              placeholder="https://"
+              initialValue={initialData?.joinUrl}
+              disabled={isPending} />
+            <div className="w-full flex justify-end">
+              <Button
+                type="submit"
+                disabled={isPending}
+              >
+                保存
+              </Button>
+            </div>
           </form>
         </Form>
       </div>

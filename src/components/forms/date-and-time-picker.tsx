@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { format, Locale } from "date-fns";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -33,7 +33,7 @@ export const DateAndTimePicker: React.FC<DateAndTimePickerProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(defaultValue)
-  const [time, setTime] = React.useState<string>(defaultValue ? format(defaultValue, "HH:mm") : "10:30");
+  const [time, setTime] = React.useState<string>(defaultValue ? format(defaultValue, "HH:mm") : "00:00");
 
   const handleDateTimeChange = React.useCallback(
     (newDate: Date | undefined, newTime: string) => {
@@ -79,16 +79,27 @@ export const DateAndTimePicker: React.FC<DateAndTimePickerProps> = ({
                   }} />
               </PopoverContent>
             </Popover>
-            <Input
-              type="time"
-              id="time-picker"
-              step="60"
-              value={time}
-              onChange={(e) => {
-                setTime(e.target.value)
-                field.onChange(handleDateTimeChange(date, e.target.value))
-              }}
-              className="w-fit [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none" />
+            {date && (
+              <Input
+                type="time"
+                id="time-picker"
+                step="60"
+                value={time}
+                onChange={(e) => {
+                  setTime(e.target.value)
+                  field.onChange(handleDateTimeChange(date, e.target.value))
+                }}
+                className="w-fit [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none" />
+            )}
+            {date && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setDate(undefined)}
+              >
+                <X />
+              </Button>
+            )}
           </div>
         </FormControl>
       )} />

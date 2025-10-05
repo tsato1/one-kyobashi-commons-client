@@ -31,14 +31,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DateAndTimePicker } from "@/components/forms/date-and-time-picker";
-import { MultiInputField } from "@/components/multi-input-field";
+import { DateAndTimePicker } from "./date-and-time-picker";
+import { MultiInputField } from "./multi-input-field";
+import { MultiSelectField } from "./multi-select-field";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 interface FormFieldProps {
   name: string;
   label: string;
+  subLabel?: string;
   type?:
   | "text"
   | "email"
@@ -50,13 +52,15 @@ interface FormFieldProps {
   | "password"
   | "file"
   | "datetime"
-  | "multi-input";
+  | "multi-input"
+  | "multi-select";
   placeholder?: string;
   options?: { value: string; label: string }[];
   accept?: string;
   className?: string;
   labelClassName?: string;
   inputClassName?: string;
+  buttonLabel?: string;
   value?: string;
   disabled?: boolean;
   multiple?: boolean;
@@ -68,6 +72,7 @@ interface FormFieldProps {
 export const CustomFormField: React.FC<FormFieldProps> = ({
   name,
   label,
+  subLabel,
   type = "text",
   placeholder,
   options,
@@ -75,6 +80,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
   className,
   inputClassName,
   labelClassName,
+  buttonLabel,
   disabled = false,
   multiple = false,
   isIcon = false,
@@ -103,7 +109,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             onValueChange={field.onChange}
           >
             <SelectTrigger
-              className={`w-full p-4 ${inputClassName}`}
+              className={`min-w-[160px] w-fit p-4 ${inputClassName}`}
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
@@ -139,7 +145,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
               checked={field.value}
               onCheckedChange={field.onChange}
               id={name}
-              className={`text-customgreys-dirtyGrey ${inputClassName}`} />
+              className={`text-gray-500 ${inputClassName}`} />
             <FormLabel htmlFor={name} className={labelClassName}>
               {label}
             </FormLabel>
@@ -169,7 +175,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
       case "datetime":
         return (
           <DateAndTimePicker
-            defaultValue={initialValue as Date}
+            defaultValue={initialValue as Date | undefined}
             name={name}
             control={control}
             placeholder={placeholder}
@@ -182,7 +188,15 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             name={name}
             control={control}
             placeholder={placeholder}
-            inputClassName={inputClassName} />
+            inputClassName={inputClassName}
+            buttonLabel={buttonLabel} />
+        );
+      case "multi-select":
+        return (
+          <MultiSelectField
+            name={name}
+            control={control}
+            items={options || []} />
         );
       default:
         return (
@@ -203,12 +217,11 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
       defaultValue={initialValue}
       render={({ field }) => (
         <FormItem
-          className={`${type !== "switch" && "rounded-md"
-            } relative ${className}`}
+          className={`${type !== "switch" && "rounded-md"} relative ${className}`}
         >
           {(type !== "checkbox" && type !== "switch") && (
             <div className="flex justify-between items-center">
-              <FormLabel className={`text-sm ${labelClassName}`}>
+              <FormLabel className={labelClassName}>
                 {label}
               </FormLabel>
 
@@ -216,7 +229,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
                 isIcon &&
                 type !== "file" &&
                 type !== "multi-input" && (
-                  <Edit className="size-4 text-customgreys-dirtyGrey" />
+                  <Edit className="size-4 text-gray-500" />
                 )}
             </div>
           )}
@@ -226,6 +239,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
               value: field.value !== undefined ? field.value : initialValue,
             })}
           </FormControl>
+          <p className="text-sm">{subLabel}</p>
           <FormMessage className="text-red-400" />
         </FormItem>
       )} />

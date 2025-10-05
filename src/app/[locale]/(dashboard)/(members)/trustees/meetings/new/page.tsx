@@ -4,9 +4,8 @@ import { signOut } from "aws-amplify/auth";
 import { toast } from "sonner";
 
 import { ErrorComponent } from "@/components/error-component";
-import { MeetingForm } from "@/components/forms/meeting-form";
+import { MutateMeeting, MeetingForm } from "@/components/forms/meeting-form";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MeetingFormData } from "@/lib/schemas";
 import { useCreateMeetingMutation, useGetAuthUserQuery } from "@/state/api";
 
 const NewMeetingPage = () => {
@@ -25,7 +24,7 @@ const NewMeetingPage = () => {
     );
   }
 
-  const handleSubmit = async (data: MeetingFormData) => {
+  const handleSubmit = async (data: MutateMeeting) => {
     if (!authUser?.cognitoInfo?.userId) {
       toast.error("ユーザIDが見つかりません。ログインし直してください。");
       setTimeout(async () => {
@@ -35,13 +34,9 @@ const NewMeetingPage = () => {
       return;
     }
 
-    const formData = new FormData();
-    // formData.append("visibility", data.visibility || "Private");
-    // formData.append("startDate", data.startDate.toISOString());
-    // formData.append("endDate", data.endDate?.toISOString() || "");
-    formData.append("description", data.description || "");
-    formData.append("createdBy", authUser.cognitoInfo.userId);
-    await createMeeting(formData);
+    console.log("Data being sent to server", data);
+
+    await createMeeting(data);
   };
 
   if (!authUser) {
@@ -49,9 +44,7 @@ const NewMeetingPage = () => {
   }
 
   return (
-    <MeetingForm
-      onSubmit={handleSubmit}
-      userRole="crew" />
+    <MeetingForm onSubmit={handleSubmit} />
   )
 }
 
