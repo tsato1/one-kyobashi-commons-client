@@ -5,25 +5,12 @@ import { toast } from "sonner";
 
 import { ErrorComponent } from "@/components/error-component";
 import { MutateMeeting, MeetingForm } from "@/components/forms/meeting-form";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useCreateMeetingMutation, useGetAuthUserQuery } from "@/state/api";
 
 const NewMeetingPage = () => {
   const router = useRouter();
   const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
   const [createMeeting] = useCreateMeetingMutation();
-
-  if (authLoading) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="w-[80%] h-10 mb-1" />
-        <Skeleton className="w-[70%] h-14" />
-
-        <Skeleton className="w-[80%] h-10 mb-1" />
-        <Skeleton className="w-[70%] h-14" />
-      </div>
-    );
-  }
 
   const handleSubmit = async (data: MutateMeeting) => {
     console.log("Data being sent to server", data);
@@ -35,6 +22,10 @@ const NewMeetingPage = () => {
       toast.error("Failed to create meeting. Please try again.");
     }
   };
+
+  if (authLoading) {
+    return <>Loading...</>;
+  }
 
   if (!authUser) {
     return <ErrorComponent />;
