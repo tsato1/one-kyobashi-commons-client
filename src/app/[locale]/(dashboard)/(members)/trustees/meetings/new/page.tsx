@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { signOut } from "aws-amplify/auth";
 import { toast } from "sonner";
 
 import { ErrorComponent } from "@/components/error-component";
