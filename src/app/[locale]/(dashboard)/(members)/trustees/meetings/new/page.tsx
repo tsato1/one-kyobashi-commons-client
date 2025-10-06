@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { signOut } from "aws-amplify/auth";
 import { toast } from "sonner";
 
@@ -9,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCreateMeetingMutation, useGetAuthUserQuery } from "@/state/api";
 
 const NewMeetingPage = () => {
+  const router = useRouter();
   const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
   const [createMeeting] = useCreateMeetingMutation();
 
@@ -25,18 +27,14 @@ const NewMeetingPage = () => {
   }
 
   const handleSubmit = async (data: MutateMeeting) => {
-    if (!authUser?.cognitoInfo?.userId) {
-      toast.error("ユーザIDが見つかりません。ログインし直してください。");
-      setTimeout(async () => {
-        await signOut();
-        window.location.href = "/";
-      }, 1000);
-      return;
-    }
-
     console.log("Data being sent to server", data);
 
-    await createMeeting(data);
+    try {
+      await createMeeting(data);
+      router.push("/trustees/meetings");
+    } catch {
+      toast.error("Failed to create meeting. Please try again.");
+    }
   };
 
   if (!authUser) {
