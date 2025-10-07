@@ -5,9 +5,9 @@ import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { meetingResponseSchema } from "@one-kyobashi-commons/shared";
 import { MutateMeeting } from "@/components/forms/meeting-form";
-import { FiltersState } from "./globalSlice";
+import { FiltersState, MeetingFiltersState } from "./globalSlice";
 
-type MeetingResponse = z.infer<typeof meetingResponseSchema>;
+export type MeetingResponse = z.infer<typeof meetingResponseSchema>;
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -142,11 +142,10 @@ export const api = createApi({
 
     getMeetings: build.query<
       MeetingResponse[],
-      Partial<FiltersState> & { favoriteIds?: number[] }
+      Partial<MeetingFiltersState> & { favoriteIds?: number[] }
     >({
       query: (filters) => {
         const params = cleanParams({
-          location: filters.location,
           dateMin: filters.dateRange?.[0],
           dateMax: filters.dateRange?.[1],
         });

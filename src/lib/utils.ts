@@ -2,6 +2,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { ja, enUS } from "date-fns/locale";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -34,6 +36,17 @@ export function localeToLanguageString(locale: Locale) {
     default:
       return "English"
   }
+}
+
+export function formatTime(date: Date, locale: Locale) {
+  const pattern = locale === Locale.ja ? "a h:mm" : "h:mm a";
+  let formatted = format(date, pattern, { locale: locale === Locale.ja ? ja : enUS });
+
+  if (locale === Locale.ja) {
+    formatted = formatted.replace("AM", "午前").replace("PM", "午後");
+  }
+
+  return formatted;
 }
 
 export function cleanParams(params: Record<string, any>): Record<string, any> {

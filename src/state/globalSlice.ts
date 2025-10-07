@@ -8,6 +8,10 @@ export interface FiltersState {
   dateRange: [string, string] | [null, null];
 }
 
+export interface MeetingFiltersState {
+  dateRange: [string, string] | [null, null];
+}
+
 interface InitialStateTypes {
   filters: FiltersState;
   isFiltersFullOpen: boolean;

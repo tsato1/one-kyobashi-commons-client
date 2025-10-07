@@ -1,23 +1,126 @@
 "use client";
 
-import { useGetMeetingsQuery } from "@/state/api";
+import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { addDays, addMonths, endOfMonth, format, startOfMonth } from "date-fns";
+import { ja, enUS } from "date-fns/locale";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+
+import { MeetingResponse, useGetMeetingsQuery } from "@/state/api";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { formatTime, Locale } from "@/lib/utils";
 
 const MeetingsPage = () => {
-  const { data: meetings, isLoading } = useGetMeetingsQuery({});
+  const t = useTranslations("");
+  const locale = useLocale();
+
+  const [dateRange, setDateRange] = useState([
+    startOfMonth(new Date()),
+    endOfMonth(new Date()),
+  ]);
+
+  const [startDate, endDate] = dateRange;
+
+  const { data: meetings, isLoading } = useGetMeetingsQuery({
+    dateRange: [
+      startDate.toISOString(),
+      endDate.toISOString(),
+    ]
+  });
+
+  const selectPreviousMonth = () => {
+    setDateRange([
+      startOfMonth(addMonths(startDate, -1)),
+      endOfMonth(addMonths(startDate, -1)),
+    ]);
+  };
+
+  const selectNextMonth = () => {
+    setDateRange([
+      startOfMonth(addMonths(startDate, 1)),
+      endOfMonth(addMonths(startDate, 1)),
+    ]);
+  };
+
+  const groupedMeetings = meetings
+    ? meetings.reduce((acc: Record<string, MeetingResponse[]>, meeting: MeetingResponse) => {
+      const dateKey = format(new Date(meeting.startDate), 'yyyy-MM-dd');
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(meeting);
+      return acc;
+    }, {})
+    : {};
 
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-10">
-      {meetings?.map((meeting) => (
-        <div key={meeting.id} className="p-4 border rounded mb-4 w-1/2">
-          {/* <p>Meeting ID: {meeting.id}</p> */}
-          {/* <p>Visibility: {meeting.visibility}</p> */}
-          <p>日時: {meeting.startDate?.toString()}</p>
-          {/* <p>End Date: {meeting.endDate?.toString()}</p> */}
-          <p>{meeting.description}</p>
-        </div>
-      ))}
-      {isLoading && <p>Loading meetings...</p>}
-      {!isLoading && meetings?.length === 0 && <p>ミーティングがありません</p>}
+    <div className="w-full flex flex-col items-center justify-center mt-10 px-1">
+      <div className="w-full max-w-[600px] flex items-center justify-between mb-4">
+        <Button
+          variant="ghost"
+          size="xl"
+          onClick={selectPreviousMonth}
+          className="w-10 h-10 flex items-center justify-center cursor-pointer"
+        >
+          <ChevronLeftIcon className="size-6" />
+        </Button>
+        <Label className="text-lg sm:text-xl">
+          {format(startDate, "LLLL yyyy", { locale: locale === "ja" ? ja : enUS })}
+        </Label>
+        <Button
+          variant="ghost"
+          size="xl"
+          onClick={selectNextMonth}
+          className="w-10 h-10 flex items-center justify-center cursor-pointer"
+        >
+          <ChevronRightIcon className="size-6" />
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <p>Loading meetings...</p>
+      ) : (
+        meetings && meetings.length > 0 ? (
+          Object.keys(groupedMeetings).map((dateKey) => (
+            <div key={dateKey} className="w-full max-w-[550px] mb-4">
+              <h2 className="text-lg font-semibold mb-2">
+                {format(new Date(dateKey), "PPP", { locale: locale === "ja" ? ja : enUS })}
+              </h2>
+              {groupedMeetings[dateKey].map((meeting) => (
+                <div
+                  key={meeting.id}
+                  className="relative border rounded shadow p-4 overflow-hidden bg-white"
+                >
+                  <p className="w-3/4 text-nowrap text-ellipsis overflow-hidden">{meeting.name}</p>
+                  <p className="flex text-sm">
+                    <span>時間: {formatTime(meeting.startDate, locale as Locale)}</span>
+                    {meeting.endDate && (
+                      <>
+                        <span className="px-2">~</span>
+                        <span>{formatTime(meeting.endDate, locale as Locale)}</span>
+                      </>
+                    )}
+                  </p>
+
+                  {new Date() < new Date(meeting.startDate) && (
+                    <div className="absolute w-24 top-0 right-0 rotate-45 translate-x-6 translate-y-3 bg-accent">
+                      <p className="text-xs text-accent-foreground text-center py-1">終了</p>
+                    </div>
+                  )}
+                  {addDays(new Date(), 5) > new Date(meeting.startDate) && (
+                    <div className="absolute w-24 top-0 right-0 rotate-45 translate-x-6 translate-y-3 bg-pink-200">
+                      <p className="text-xs text-black text-center py-1">もうすぐ</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))
+        ) : (
+          <p>ミーティングがありません</p>
+        )
+      )}
     </div>
   )
 }
