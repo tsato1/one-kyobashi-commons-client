@@ -58,10 +58,10 @@ export const MeetingForm = ({
             <CustomFormField
               name="visibility"
               label="公開タイプ"
-              subLabel="制限を設けずに公開または選択したメンバーに限定公開を選びます"
+              subLabel="誰でも参加可能な一般公開または選択したメンバーに限定公開を選びます"
               type="select"
               options={[
-                { value: "public", label: "公開" },
+                { value: "public", label: "一般公開" },
                 { value: "private", label: "限定公開" }
               ]}
               initialValue={initialData?.visibility || "private"}
@@ -103,6 +103,7 @@ export const MeetingForm = ({
             <CustomFormField
               name="allowedRoles"
               label="対象者"
+              subLabel="一般公開の場合、何にチェックを入れたかに関わらず、メンバー以外の人でも参加が可能な旨表示されます"
               type="multi-select"
               options={[
                 { value: "crew", label: "クルー" },
