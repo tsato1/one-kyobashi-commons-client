@@ -62,7 +62,10 @@ export const DateAndTimePicker: React.FC<DateAndTimePickerProps> = ({
                   id="date-picker"
                   className="w-32 justify-between font-normal"
                 >
-                  {date ? date.toLocaleDateString() : placeholder || "Select date"}
+                  {date && !isNaN(date.getTime())
+                    ? format(date, "PP", { locale })
+                    : placeholder || "Select date"
+                  }
                   <ChevronDownIcon />
                 </Button>
               </PopoverTrigger>
