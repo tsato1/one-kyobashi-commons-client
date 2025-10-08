@@ -43,7 +43,7 @@ export const MeetingForm = ({
     <div className="w-full pt-2 pb-5 px-3 sm:px-6">
       <div className="mb-5">
         <h1 className="text-xl font-semibold">
-          {initialData ? `ミーティング - ${initialData.startDate}` : "新規ミーティング"}
+          {initialData ? `${initialData.name}` : "新規ミーティング"}
         </h1>
         <p className="text-sm text-gray-500 mt-1">
           ミーティングを{initialData ? "編集" : "作成"}します。
@@ -58,7 +58,7 @@ export const MeetingForm = ({
             <CustomFormField
               name="visibility"
               label="公開タイプ"
-              subLabel="誰でも参加可能な一般公開または選択したメンバーに限定公開を選びます"
+              subLabel="誰でも参加可能な一般公開または選択したメンバーが参加の限定公開を選びます"
               type="select"
               options={[
                 { value: "public", label: "一般公開" },
