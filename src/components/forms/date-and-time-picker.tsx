@@ -15,44 +15,51 @@ import {
 import { cn } from "@/lib/utils";
 
 interface DateAndTimePickerProps {
-  defaultValue?: Date;
   name: string;
   control: any;
+  value?: Date;
+  onChange: (date?: Date) => void;
   placeholder?: string;
+  required?: boolean;
   locale?: Locale;
   className?: string;
 }
 
-export const DateAndTimePicker: React.FC<DateAndTimePickerProps> = ({
-  defaultValue,
+export const DateAndTimePicker = ({
   name,
   control,
+  value,
+  onChange,
   placeholder,
+  required,
   locale,
   className,
-}) => {
+}: DateAndTimePickerProps) => {
+  const date = value;
+  const time = value ? format(value, "HH:mm") : "19:00";
+
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(defaultValue)
-  const [time, setTime] = React.useState<string>(defaultValue ? format(defaultValue, "HH:mm") : "00:00");
 
   const handleDateTimeChange = React.useCallback(
-    (newDate: Date | undefined, newTime: string) => {
-      if (newDate) {
-        const [hours, minutes] = newTime.split(":")
-        const updatedDate = new Date(newDate)
-        updatedDate.setHours(parseInt(hours), parseInt(minutes), 0)
-        return updatedDate
+    (selectedDate: Date | undefined, selectedTime: string) => {
+      if (!selectedDate) {
+        onChange(undefined);
+        return;
       }
-      return undefined
+
+      const [hours, minutes] = selectedTime.split(":").map(Number);
+      const updatedDate = new Date(selectedDate);
+      updatedDate.setHours(hours, minutes, 0);
+      onChange(updatedDate);
     },
-    []
+    [onChange]
   )
 
   return (
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
+      render={() => (
         <FormControl>
           <div className={cn("flex gap-4", className)}>
             <Popover open={open} onOpenChange={setOpen}>
@@ -76,8 +83,7 @@ export const DateAndTimePicker: React.FC<DateAndTimePickerProps> = ({
                   selected={date}
                   captionLayout="dropdown"
                   onSelect={(date) => {
-                    setDate(date)
-                    field.onChange(handleDateTimeChange(date, time))
+                    handleDateTimeChange(date, time);
                     setOpen(false)
                   }} />
               </PopoverContent>
@@ -88,17 +94,14 @@ export const DateAndTimePicker: React.FC<DateAndTimePickerProps> = ({
                 id="time-picker"
                 step="60"
                 value={time}
-                onChange={(e) => {
-                  setTime(e.target.value)
-                  field.onChange(handleDateTimeChange(date, e.target.value))
-                }}
+                onChange={(e) => { handleDateTimeChange(date, e.target.value) }}
                 className="w-fit [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none" />
             )}
-            {date && (
+            {date && !required && (
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => setDate(undefined)}
+                onClick={() => onChange(undefined)}
               >
                 <X />
               </Button>

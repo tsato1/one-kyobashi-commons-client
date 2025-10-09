@@ -193,6 +193,23 @@ export const api = createApi({
       },
     }),
 
+    updateMeeting: build.mutation<MeetingResponse, MutateMeeting & { id: string }>({
+      query: (meeting) => ({
+        url: `meetings/${meeting.id}`,
+        method: "PATCH",
+        body: meeting
+      }),
+      invalidatesTags: () => [
+        { type: "Meetings", id: "LIST" },
+      ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "ミーティングを更新しました。",
+          error: "ミーティングが更新できませんでした。",
+        });
+      },
+    }),
+
     updateCrewSettings: build.mutation<
       Crew,
       { cognitoId?: string } & Partial<Crew>
@@ -250,6 +267,7 @@ export const {
   useGetMeetingsQuery,
   useGetMeetingByIdQuery,
   useCreateMeetingMutation,
+  useUpdateMeetingMutation,
   useUpdateCrewSettingsMutation,
   useUpdateTrusteeSettingsMutation,
   useGetPaymentsQuery,

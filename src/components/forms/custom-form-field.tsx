@@ -4,7 +4,7 @@ import {
   FieldValues,
   useFormContext,
 } from "react-hook-form";
-import { Locale } from "date-fns";
+import { Locale, parseISO } from "date-fns";
 import { Edit } from "lucide-react";
 import { registerPlugin } from "filepond";
 import { FilePond } from "react-filepond";
@@ -24,6 +24,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -63,9 +64,10 @@ interface FormFieldProps {
   buttonLabel?: string;
   value?: string;
   disabled?: boolean;
+  required?: boolean;
   multiple?: boolean;
   isIcon?: boolean;
-  initialValue?: string | number | boolean | string[] | Date;
+  initialValue?: string | number | boolean | string[];
   locale?: Locale;
 }
 
@@ -82,6 +84,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
   labelClassName,
   buttonLabel,
   disabled = false,
+  required = false,
   multiple = false,
   isIcon = false,
   initialValue,
@@ -175,11 +178,13 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
       case "datetime":
         return (
           <DateAndTimePicker
-            defaultValue={initialValue as Date | undefined}
+            value={field.value ? parseISO(field.value) : undefined}
+            onChange={(newDate) => field.onChange(newDate ? newDate.toISOString() : undefined)}
             name={name}
             control={control}
             placeholder={placeholder}
             locale={locale as Locale}
+            required={required}
             className={`border-gray-200 ${inputClassName}`} />
         );
       case "multi-input":
@@ -223,6 +228,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             <div className="flex justify-between items-center">
               <FormLabel className={labelClassName}>
                 {label}
+                {required && <span className="text-destructive">*</span>}
               </FormLabel>
 
               {!disabled &&

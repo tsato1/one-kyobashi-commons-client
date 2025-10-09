@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { addDays, addMonths, endOfMonth, format, startOfMonth } from "date-fns";
 import { ja, enUS } from "date-fns/locale";
@@ -13,7 +14,15 @@ import { formatTime, Locale } from "@/lib/utils";
 
 const MeetingsPage = () => {
   const t = useTranslations("");
+  const router = useRouter();
   const locale = useLocale();
+
+  const filters = useMemo(() => ({
+    dateRange: [
+      startOfMonth(new Date()).toISOString(),
+      endOfMonth(new Date).toISOString()
+    ] as [string, string]
+  }), []);
 
   const [dateRange, setDateRange] = useState([
     startOfMonth(new Date()),
@@ -22,12 +31,18 @@ const MeetingsPage = () => {
 
   const [startDate, endDate] = dateRange;
 
-  const { data: meetings, isLoading } = useGetMeetingsQuery({
-    dateRange: [
-      startDate.toISOString(),
-      endDate.toISOString(),
-    ]
-  });
+  const { data: meetings, isLoading } = useGetMeetingsQuery(filters);
+
+  const groupedMeetings = meetings
+    ? meetings.reduce((acc: Record<string, MeetingResponse[]>, meeting: MeetingResponse) => {
+      const dateKey = format(new Date(meeting.startDate), 'yyyy-MM-dd');
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(meeting);
+      return acc;
+    }, {})
+    : {};
 
   const selectPreviousMonth = () => {
     setDateRange([
@@ -43,16 +58,9 @@ const MeetingsPage = () => {
     ]);
   };
 
-  const groupedMeetings = meetings
-    ? meetings.reduce((acc: Record<string, MeetingResponse[]>, meeting: MeetingResponse) => {
-      const dateKey = format(new Date(meeting.startDate), 'yyyy-MM-dd');
-      if (!acc[dateKey]) {
-        acc[dateKey] = [];
-      }
-      acc[dateKey].push(meeting);
-      return acc;
-    }, {})
-    : {};
+  const handleMeetingClick = (id: string) => {
+    router.push(`/trustees/meetings/${id}`);
+  }
 
   return (
     <div className="w-full flex flex-col items-center justify-center mt-10 px-1">
@@ -90,25 +98,27 @@ const MeetingsPage = () => {
               {groupedMeetings[dateKey].map((meeting) => (
                 <div
                   key={meeting.id}
-                  className="relative border rounded shadow p-4 overflow-hidden bg-white"
+                  role="button"
+                  className="relative border rounded shadow p-4 overflow-hidden bg-white cursor-pointer hover:scale-105 transition-all duration-300"
+                  onClick={() => handleMeetingClick(meeting.id)}
                 >
                   <p className="w-3/4 text-nowrap text-ellipsis overflow-hidden">{meeting.name}</p>
                   <p className="flex text-sm">
-                    <span>時間: {formatTime(meeting.startDate, locale as Locale)}</span>
+                    <span>時間: {formatTime(new Date(meeting.startDate), locale as Locale)}</span>
                     {meeting.endDate && (
                       <>
                         <span className="px-2">~</span>
-                        <span>{formatTime(meeting.endDate, locale as Locale)}</span>
+                        <span>{formatTime(new Date(meeting.endDate), locale as Locale)}</span>
                       </>
                     )}
                   </p>
 
-                  {new Date() < new Date(meeting.startDate) && (
+                  {new Date() > new Date(meeting.startDate) && (
                     <div className="absolute w-24 top-0 right-0 rotate-45 translate-x-6 translate-y-3 bg-accent">
                       <p className="text-xs text-accent-foreground text-center py-1">終了</p>
                     </div>
                   )}
-                  {addDays(new Date(), 5) > new Date(meeting.startDate) && (
+                  {(new Date() < new Date(meeting.startDate) && addDays(new Date(), 5) > new Date(meeting.startDate)) && (
                     <div className="absolute w-24 top-0 right-0 rotate-45 translate-x-6 translate-y-3 bg-pink-200">
                       <p className="text-xs text-black text-center py-1">もうすぐ</p>
                     </div>

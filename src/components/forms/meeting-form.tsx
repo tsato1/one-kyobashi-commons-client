@@ -1,15 +1,17 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useLocale } from "next-intl";
 import { enUS, ja } from "date-fns/locale";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { mutateMeetingSchema } from "@one-kyobashi-commons/shared";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { CustomFormField } from "./custom-form-field";
 
 export type MutateMeeting = z.infer<typeof mutateMeetingSchema>;
@@ -30,8 +32,16 @@ export const MeetingForm = ({
 
   const form = useForm<MutateMeeting>({
     resolver: zodResolver(mutateMeetingSchema),
-    defaultValues: initialData,
+    defaultValues: initialData || {},
   });
+
+  const { isDirty } = form.formState;
+
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form]);
 
   const handleSubmit = (data: MutateMeeting) => {
     startTransition(async () => {
@@ -49,7 +59,16 @@ export const MeetingForm = ({
           ミーティングを{initialData ? "編集" : "作成"}します。
         </p>
       </div>
-      <div className="bg-white rounded-xl p-6">
+      <div className={cn(
+        "relative bg-white rounded-xl px-2 sm:px-4 py-4 sm:py-6",
+        (!!initialData && isDirty) && "ring-2 ring-primary"
+      )}>
+        {(!!initialData && isDirty) && (
+          <Badge className="absolute top-0 right-0 mx-2 sm:mx-4 my-4 sm:my-6">
+            Edited
+          </Badge>
+        )}
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
@@ -70,15 +89,14 @@ export const MeetingForm = ({
               name="startDate"
               label="開始日時"
               type="datetime"
-              initialValue={initialData?.startDate ? new Date(initialData.startDate) : undefined}
               placeholder="未設定"
               disabled={isPending}
+              required
               locale={dateFnsLocale} />
             <CustomFormField
               name="endDate"
               label="終了日時"
               type="datetime"
-              initialValue={initialData?.endDate ? new Date(initialData.endDate) : undefined}
               placeholder="未設定"
               disabled={isPending}
               locale={dateFnsLocale} />
@@ -86,7 +104,8 @@ export const MeetingForm = ({
               name="name"
               label="名前"
               initialValue={initialData?.name || ""}
-              disabled={isPending} />
+              disabled={isPending}
+              required />
             <CustomFormField
               name="description"
               label="詳細（議題など）"
@@ -109,7 +128,7 @@ export const MeetingForm = ({
                 { value: "crew", label: "クルー" },
                 { value: "trustee", label: "一味" },
               ]}
-              initialValue={initialData?.allowedRoles || ["trustee"]}
+              initialValue={initialData?.allowedRoles || []}
               disabled={isPending} />
             <CustomFormField
               name="materialUrls"
@@ -117,7 +136,6 @@ export const MeetingForm = ({
               subLabel="スライドや資料のURLを追加します"
               type="multi-input"
               placeholder="https://"
-              initialValue={initialData?.materialUrls || []}
               buttonLabel="追加"
               disabled={isPending} />
             <CustomFormField
@@ -125,12 +143,12 @@ export const MeetingForm = ({
               label="オンライン会議URL"
               subLabel="Google MeetまたはZoomのURLが入力できます"
               placeholder="https://"
-              initialValue={initialData?.joinUrl}
+              initialValue={initialData?.joinUrl || ""}
               disabled={isPending} />
             <div className="w-full flex justify-end">
               <Button
                 type="submit"
-                disabled={isPending}
+                disabled={isPending || !isDirty}
               >
                 保存
               </Button>

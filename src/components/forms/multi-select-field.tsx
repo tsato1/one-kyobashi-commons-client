@@ -35,11 +35,10 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
                     checked={field.value?.includes(item.value) || false}
                     onCheckedChange={(checked) => {
                       const currentValues = Array.isArray(field.value) ? field.value : [];
-                      field.onChange(
-                        checked
-                          ? [...currentValues, item.value]
-                          : currentValues.filter((value: string) => value !== item.value)
-                      );
+                      const newValues = checked
+                        ? [...currentValues, item.value]
+                        : currentValues.filter((value: string) => value !== item.value)
+                      field.onChange(newValues.sort());
                     }} />
                   <FormLabel htmlFor={`${name}-${item.value}`}>
                     {item.label}
