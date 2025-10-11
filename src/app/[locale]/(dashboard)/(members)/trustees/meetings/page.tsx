@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { addDays, addMonths, endOfMonth, format, startOfMonth } from "date-fns";
 import { ja, enUS } from "date-fns/locale";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-import { MeetingResponse, useGetMeetingsQuery } from "@/state/api";
+import { MeetingResponse, useGetAllMeetingsQuery } from "@/state/api";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { formatTime, Locale } from "@/lib/utils";
@@ -20,7 +20,7 @@ const MeetingsPage = () => {
   const filters = useMemo(() => ({
     dateRange: [
       startOfMonth(new Date()).toISOString(),
-      endOfMonth(new Date).toISOString()
+      endOfMonth(new Date()).toISOString()
     ] as [string, string]
   }), []);
 
@@ -31,7 +31,11 @@ const MeetingsPage = () => {
 
   const [startDate, endDate] = dateRange;
 
-  const { data: meetings, isLoading } = useGetMeetingsQuery(filters);
+  const { data: meetings, isLoading, refetch } = useGetAllMeetingsQuery(filters);
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   const groupedMeetings = meetings
     ? meetings.reduce((acc: Record<string, MeetingResponse[]>, meeting: MeetingResponse) => {
@@ -95,36 +99,38 @@ const MeetingsPage = () => {
               <h2 className="text-lg font-semibold mb-2">
                 {format(new Date(dateKey), "PPP", { locale: locale === "ja" ? ja : enUS })}
               </h2>
-              {groupedMeetings[dateKey].map((meeting) => (
-                <div
-                  key={meeting.id}
-                  role="button"
-                  className="relative border rounded shadow p-4 overflow-hidden bg-white cursor-pointer hover:scale-105 transition-all duration-300"
-                  onClick={() => handleMeetingClick(meeting.id)}
-                >
-                  <p className="w-3/4 text-nowrap text-ellipsis overflow-hidden">{meeting.name}</p>
-                  <p className="flex text-sm">
-                    <span>時間: {formatTime(new Date(meeting.startDate), locale as Locale)}</span>
-                    {meeting.endDate && (
-                      <>
-                        <span className="px-2">~</span>
-                        <span>{formatTime(new Date(meeting.endDate), locale as Locale)}</span>
-                      </>
-                    )}
-                  </p>
+              <div className="space-y-1">
+                {groupedMeetings[dateKey].map((meeting) => (
+                  <div
+                    key={meeting.id}
+                    role="button"
+                    className="relative border rounded shadow p-4 overflow-hidden bg-white cursor-pointer hover:scale-105 transition-all duration-300"
+                    onClick={() => handleMeetingClick(meeting.id)}
+                  >
+                    <p className="w-3/4 text-nowrap text-ellipsis overflow-hidden">{meeting.name}</p>
+                    <p className="flex text-sm">
+                      <span>時間: {formatTime(new Date(meeting.startDate), locale as Locale)}</span>
+                      {meeting.endDate && (
+                        <>
+                          <span className="px-2">~</span>
+                          <span>{formatTime(new Date(meeting.endDate), locale as Locale)}</span>
+                        </>
+                      )}
+                    </p>
 
-                  {new Date() > new Date(meeting.startDate) && (
-                    <div className="absolute w-24 top-0 right-0 rotate-45 translate-x-6 translate-y-3 bg-accent">
-                      <p className="text-xs text-accent-foreground text-center py-1">終了</p>
-                    </div>
-                  )}
-                  {(new Date() < new Date(meeting.startDate) && addDays(new Date(), 5) > new Date(meeting.startDate)) && (
-                    <div className="absolute w-24 top-0 right-0 rotate-45 translate-x-6 translate-y-3 bg-pink-200">
-                      <p className="text-xs text-black text-center py-1">もうすぐ</p>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    {new Date() > new Date(meeting.startDate) && (
+                      <div className="absolute w-24 top-0 right-0 rotate-45 translate-x-6 translate-y-3 bg-accent">
+                        <p className="text-xs text-accent-foreground text-center py-1">終了</p>
+                      </div>
+                    )}
+                    {(new Date() < new Date(meeting.startDate) && addDays(new Date(), 5) > new Date(meeting.startDate)) && (
+                      <div className="absolute w-24 top-0 right-0 rotate-45 translate-x-6 translate-y-3 bg-pink-200">
+                        <p className="text-xs text-black text-center py-1">もうすぐ</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           ))
         ) : (

@@ -27,6 +27,7 @@ export const api = createApi({
     "Trustees",
     "Crews",
     "Meetings",
+    "AllMeetings",
     "MeetingDetails",
     "Events",
     "EventDetails",
@@ -166,6 +167,32 @@ export const api = createApi({
       },
     }),
 
+    getAllMeetings: build.query<
+      MeetingResponse[],
+      Partial<MeetingFiltersState> & { favoriteIds?: number[] }
+    >({
+      query: (filters) => {
+        const params = cleanParams({
+          dateMin: filters.dateRange?.[0],
+          dateMax: filters.dateRange?.[1],
+        });
+
+        return { url: "meetings/all", params };
+      },
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }) => ({ type: "AllMeetings" as const, id })),
+            { type: "AllMeetings", id: "LIST" },
+          ]
+          : [{ type: "AllMeetings", id: "LIST" }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "ミーティングが取得できませんでした。"
+        });
+      },
+    }),
+
     getMeetingById: build.query<MeetingResponse, string>({
       query: (id) => `meetings/${id}`,
       providesTags: (result, error, id) => [{ type: "MeetingDetails", id }],
@@ -184,6 +211,7 @@ export const api = createApi({
       }),
       invalidatesTags: () => [
         { type: "Meetings", id: "LIST" },
+        { type: "AllMeetings", id: "LIST" },
       ],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
@@ -201,6 +229,7 @@ export const api = createApi({
       }),
       invalidatesTags: () => [
         { type: "Meetings", id: "LIST" },
+        { type: "AllMeetings", id: "LIST" },
       ],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
@@ -265,6 +294,7 @@ export const {
   useGetEventByIdQuery,
   useCreateEventMutation,
   useGetMeetingsQuery,
+  useGetAllMeetingsQuery,
   useGetMeetingByIdQuery,
   useCreateMeetingMutation,
   useUpdateMeetingMutation,
