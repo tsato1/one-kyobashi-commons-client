@@ -102,6 +102,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             placeholder={placeholder}
             {...field}
             rows={3}
+            disabled={disabled}
             className={`border-gray-200 p-4 ${inputClassName}`} />
         );
       case "select":
@@ -110,6 +111,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             value={field.value || (initialValue as string)}
             defaultValue={field.value || (initialValue as string)}
             onValueChange={field.onChange}
+            disabled={disabled}
           >
             <SelectTrigger
               className={`min-w-[160px] w-fit p-4 ${inputClassName}`}
@@ -185,6 +187,7 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             placeholder={placeholder}
             locale={locale as Locale}
             required={required}
+            disabled={disabled}
             className={`border-gray-200 ${inputClassName}`} />
         );
       case "multi-input":
@@ -194,14 +197,16 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
             control={control}
             placeholder={placeholder}
             inputClassName={inputClassName}
-            buttonLabel={buttonLabel} />
+            buttonLabel={buttonLabel}
+            disabled={disabled} />
         );
       case "multi-select":
         return (
           <MultiSelectField
             name={name}
             control={control}
-            items={options || []} />
+            items={options || []}
+            disabled={disabled} />
         );
       default:
         return (

@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { date } from "zod";
 
 interface DateAndTimePickerProps {
   name: string;
@@ -21,6 +22,7 @@ interface DateAndTimePickerProps {
   onChange: (date?: Date) => void;
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean
   locale?: Locale;
   className?: string;
 }
@@ -32,6 +34,7 @@ export const DateAndTimePicker = ({
   onChange,
   placeholder,
   required,
+  disabled,
   locale,
   className,
 }: DateAndTimePickerProps) => {
@@ -63,11 +66,16 @@ export const DateAndTimePicker = ({
         <FormControl>
           <div className={cn("flex gap-4", className)}>
             <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild className="bg-transparent selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input shadow-xs outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
+              <PopoverTrigger
+                asChild
+                className="bg-transparent selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input shadow-xs outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                disabled={disabled}
+              >
                 <Button
                   variant="outline"
                   id="date-picker"
                   className="w-32 justify-between font-normal"
+                  disabled={disabled}
                 >
                   {date && !isNaN(date.getTime())
                     ? format(date, "PP", { locale })
@@ -82,6 +90,7 @@ export const DateAndTimePicker = ({
                   locale={locale as Locale}
                   selected={date}
                   captionLayout="dropdown"
+                  disabled={disabled}
                   onSelect={(date) => {
                     handleDateTimeChange(date, time);
                     setOpen(false)
@@ -95,6 +104,7 @@ export const DateAndTimePicker = ({
                 step="60"
                 value={time}
                 onChange={(e) => { handleDateTimeChange(date, e.target.value) }}
+                disabled={disabled}
                 className="w-fit [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none" />
             )}
             {date && !required && (
@@ -102,6 +112,7 @@ export const DateAndTimePicker = ({
                 type="button"
                 variant="ghost"
                 onClick={() => onChange(undefined)}
+                disabled={disabled}
               >
                 <X />
               </Button>

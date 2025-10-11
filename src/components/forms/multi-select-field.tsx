@@ -9,13 +9,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 interface MultiSelectFieldProps {
   name: string;
   control: any;
-  items: { value: string, label: string }[]
+  items: { value: string, label: string }[];
+  disabled?: boolean;
 }
 
 export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   name,
   control,
-  items
+  items,
+  disabled,
 }) => {
   return (
     <FormField
@@ -24,29 +26,24 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
       render={({ field }) => (
         <div className="space-y-1">
           {items.map((item, index) => (
-            <div
-              key={`${name}-${item.value}-${index}`}
-              className="flex items-center space-x-2"
-            >
-              <FormControl>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`${name}-${item.value}`}
-                    checked={field.value?.includes(item.value) || false}
-                    onCheckedChange={(checked) => {
-                      const currentValues = Array.isArray(field.value) ? field.value : [];
-                      const newValues = checked
-                        ? [...currentValues, item.value]
-                        : currentValues.filter((value: string) => value !== item.value)
-                      field.onChange(newValues.sort());
-                    }} />
-                  <FormLabel htmlFor={`${name}-${item.value}`}>
-                    {item.label}
-                  </FormLabel>
-                </div>
-              </FormControl>
-
-            </div>
+            <FormControl key={`${name}-${item.value}-${index}`}>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id={`${name}-${item.value}`}
+                  checked={field.value?.includes(item.value) || false}
+                  onCheckedChange={(checked) => {
+                    const currentValues = Array.isArray(field.value) ? field.value : [];
+                    const newValues = checked
+                      ? [...currentValues, item.value]
+                      : currentValues.filter((value: string) => value !== item.value)
+                    field.onChange(newValues.sort());
+                  }}
+                  disabled={disabled} />
+                <FormLabel htmlFor={`${name}-${item.value}`}>
+                  {item.label}
+                </FormLabel>
+              </div>
+            </FormControl>
           ))}
         </div>
       )} />

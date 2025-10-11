@@ -16,6 +16,7 @@ interface MultiInputFieldProps {
   placeholder?: string;
   inputClassName?: string;
   buttonLabel?: string;
+  disabled?: boolean;
 }
 
 export const MultiInputField: React.FC<MultiInputFieldProps> = ({
@@ -24,6 +25,7 @@ export const MultiInputField: React.FC<MultiInputFieldProps> = ({
   placeholder,
   inputClassName,
   buttonLabel,
+  disabled,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -42,6 +44,7 @@ export const MultiInputField: React.FC<MultiInputFieldProps> = ({
                 <FormControl>
                   <Input
                     {...field}
+                    disabled={disabled}
                     placeholder={placeholder}
                     className={`flex-1 border-none p-4 ${inputClassName}`} />
                 </FormControl>
@@ -54,6 +57,7 @@ export const MultiInputField: React.FC<MultiInputFieldProps> = ({
             variant="ghost"
             size="icon"
             className="text-gray-500"
+            disabled={disabled}
           >
             <X className="w-4 h-4" />
           </Button>
@@ -65,6 +69,7 @@ export const MultiInputField: React.FC<MultiInputFieldProps> = ({
         variant="outline"
         size="sm"
         className="mt-2 text-gray-700"
+        disabled={disabled}
       >
         <Plus className="w-4 h-4 mr-2" />
         {buttonLabel ? buttonLabel : "Add Item"}
