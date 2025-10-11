@@ -239,42 +239,6 @@ export const api = createApi({
       },
     }),
 
-    updateCrewSettings: build.mutation<
-      Crew,
-      { cognitoId?: string } & Partial<Crew>
-    >({
-      query: ({ cognitoId, ...updatedCrew }) => ({
-        url: `crews/${cognitoId}`,
-        method: "PATCH",
-        body: updatedCrew,
-      }),
-      invalidatesTags: (result) => [{ type: "Crews", id: result?.id }],
-      async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          success: "設定を更新しました。",
-          error: "設定を更新できませんでした。",
-        });
-      },
-    }),
-
-    updateTrusteeSettings: build.mutation<
-      Trustee,
-      { cognitoId?: string } & Partial<Trustee>
-    >({
-      query: ({ cognitoId, ...updatedTrustee }) => ({
-        url: `trustees/${cognitoId}`,
-        method: "PATCH",
-        body: updatedTrustee,
-      }),
-      invalidatesTags: (result) => [{ type: "Trustees", id: result?.id }],
-      async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          success: "設定を更新しました。",
-          error: "設定が更新できませんでした。",
-        });
-      },
-    }),
-
     getPayments: build.query<Payment[], number>({
       query: (leaseId) => `leases/${leaseId}/payments`,
       providesTags: ["Payments"],
@@ -298,7 +262,5 @@ export const {
   useGetMeetingByIdQuery,
   useCreateMeetingMutation,
   useUpdateMeetingMutation,
-  useUpdateCrewSettingsMutation,
-  useUpdateTrusteeSettingsMutation,
   useGetPaymentsQuery,
 } = api;

@@ -25,15 +25,6 @@ declare global {
     user?: User
   }
 
-  type Trustee = {
-    managedEvents: Event[]
-  } & UserInfo
-
-  type Crew = {
-    events: Event[]
-    favorites: Event[]
-  } & UserInfo
-
   enum PaymentStatus {
     Pending,
     Paid,
