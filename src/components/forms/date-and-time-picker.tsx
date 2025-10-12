@@ -4,7 +4,7 @@ import { format, Locale } from "date-fns";
 import { ChevronDownIcon, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar } from "@/components/ui/calendar-i18n";
 import { FormControl, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,7 +13,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { date } from "zod";
 
 interface DateAndTimePickerProps {
   name: string;

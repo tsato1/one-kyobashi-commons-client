@@ -14,7 +14,7 @@ import { ErrorComponent } from '@/components/error-component';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
-import { genMonths } from '@/components/ui/calendar';
+import { genMonths } from '@/components/ui/calendar-i18n';
 import { cn } from '@/lib/utils';
 import { RootState, useAppDispatch } from '@/state/redux';
 import { saveStepperData } from '@/state/onboardStepperSlice';
