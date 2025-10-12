@@ -4,12 +4,12 @@ import { SettingsForm } from "@/components/forms/settings-form";
 import { SettingsFormData } from "@/lib/schemas";
 import {
   useGetAuthUserQuery,
-  useUpdateCrewSettingsMutation,
+  // useUpdateCrewSettingsMutation,
 } from "@/state/api";
 
 const CrewSettings = () => {
   const { data: authUser, isLoading } = useGetAuthUserQuery();
-  const [updateCrew] = useUpdateCrewSettingsMutation();
+  // const [updateCrew] = useUpdateCrewSettingsMutation();
 
   if (isLoading) return <>Loading...</>;
 
@@ -19,10 +19,11 @@ const CrewSettings = () => {
   };
 
   const handleSubmit = async (data: SettingsFormData) => {
-    await updateCrew({
-      cognitoId: authUser?.cognitoInfo?.userId,
-      ...data,
-    });
+    //todo
+    // await updateCrew({
+    //   cognitoId: authUser?.cognitoInfo?.userId,
+    //   ...data,
+    // });
   };
 
   return (
