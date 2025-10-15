@@ -161,13 +161,13 @@ export const AppSidebar = ({
                     <Avatar className={cn("border-2", open ? "size-9" : "size-7")}>
                       <AvatarImage src={authUser.userInfo?.image} />
                       <AvatarFallback className="bg-primary">
-                        {authUser.userInfo?.nickname?.[0].toUpperCase()}
+                        {authUser.userInfo?.nickname?.[0]?.toUpperCase() || authUser.userInfo?.email?.[0]?.toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
                     {open && (
                       <>
                         <p className="hidden md:block py-0.5 text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">
-                          {authUser.userInfo?.nickname}
+                          {authUser.userInfo?.nickname || authUser.userInfo?.email}
                         </p>
                         <ChevronRightIcon className="ml-auto" />
                       </>

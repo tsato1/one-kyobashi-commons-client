@@ -1,16 +1,14 @@
 import { AuthUser } from "aws-amplify/auth";
 
-declare global {
-  interface UserInfo {
-    id: string
-    cognitoId: string
-    email: string
-    image?: string
-    role: "crew" | "trustee"
-    nickname?: string
-    birthMonth?: number
-  }
+import {
+  meetingResponseSchema,
+  userResponseSchema
+} from "@one-kyobashi-commons/shared";
 
+export type MeetingResponse = z.infer<typeof meetingResponseSchema>;
+export type UserInfo = z.infer<typeof userResponseSchema>;
+
+declare global {
   interface Event {
     id: string
     name: string

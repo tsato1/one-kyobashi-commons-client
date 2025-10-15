@@ -25,6 +25,8 @@ const TrusteeSettings = () => {
     // });
   };
 
+  console.log(`asdf authUser=${JSON.stringify(authUser)}`);
+
   return (
     <SettingsForm
       initialData={initialData}
