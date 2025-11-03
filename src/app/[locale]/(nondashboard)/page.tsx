@@ -11,9 +11,9 @@ export default async function Home() {
 
       <Partners />
 
-      <Subhero />
-
       <Events />
+
+      <Subhero />
 
       <Footer />
     </main>

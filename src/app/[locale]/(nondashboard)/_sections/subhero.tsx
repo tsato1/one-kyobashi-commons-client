@@ -1,10 +1,47 @@
+import Image from "next/image"
+
 export const Subhero = () => {
   return (
     <section id="subhero" className="w-full max-w-5xl py-20 sm:py-40">
-      <h2 className="text-2xl font-semibold mb-4">Welcome to ONE京橋コモンズ</h2>
-      <p>
-        ONE京橋コモンズは、地域社会の交流と成長を促進するための多目的スペースです。私たちの施設では、様々なイベントやワークショップが開催され、コミュニティメンバーが集まり、学び、楽しむことができます。ぜひ、私たちの活動に参加して、新しい友人を作り、スキルを磨きましょう。
-      </p>
+      <h2 className="text-center text-2xl font-semibold mb-4">Welcome to ONE京橋コモンズ</h2>
+
+      <div className="relative w-full h-[500px]">
+        <Image
+          src="/images/about1.png"
+          alt="open_innovation"
+          sizes="(max-width: 780px) 100vw, (max-width: 1280px) 70vw, 50vw"
+          style={{ objectFit: "cover" }}
+          priority
+          fill />
+      </div>
+      <div className="relative w-full h-[500px]">
+        <Image
+          src="/images/about2.png"
+          alt="nexus"
+          sizes="(max-width: 780px) 100vw, (max-width: 1280px) 70vw, 50vw"
+          style={{ objectFit: "cover" }}
+          priority
+          fill />
+      </div>
+      <div className="relative w-full h-[500px]">
+        <Image
+          src="/images/about3.png"
+          alt="engagement"
+          sizes="(max-width: 780px) 100vw, (max-width: 1280px) 70vw, 50vw"
+          style={{ objectFit: "cover" }}
+          priority
+          fill />
+      </div>
+      <div className="relative w-full h-[500px]">
+        <Image
+          src="/images/about4.png"
+          alt="one_to_neo"
+          sizes="(max-width: 780px) 100vw, (max-width: 1280px) 70vw, 50vw"
+          style={{ objectFit: "cover" }}
+          priority
+          fill />
+      </div>
+
     </section>
   );
 }
