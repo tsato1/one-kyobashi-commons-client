@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local"
 import { hasLocale } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from "next/navigation";
@@ -18,6 +19,17 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const dotGothicRegular = localFont({
+  src: [
+    {
+      path: '../../../public/fonts/DotGothic16/DotGothic16-Regular.ttf',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-dotgothic-regular',
+  display: 'swap',
+})
 
 export default async function RootLayout({
   children,
@@ -40,7 +52,7 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${dotGothicRegular.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <MainProvider locale={locale} messages={messages}>
           {children}
