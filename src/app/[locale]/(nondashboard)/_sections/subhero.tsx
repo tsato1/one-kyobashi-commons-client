@@ -3,7 +3,7 @@ import Image from "next/image"
 export const Subhero = () => {
   return (
     <section id="subhero" className="w-full max-w-5xl py-20 sm:py-40">
-      <h2 className="text-center text-2xl font-semibold mb-4">Welcome to ONE京橋コモンズ</h2>
+      <h2 className="text-center text-3xl sm:text-4xl font-semibold mb-4">Welcome to ONE京橋コモンズ</h2>
 
       <div className="relative w-full h-[500px]">
         <Image
