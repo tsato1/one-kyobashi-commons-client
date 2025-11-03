@@ -4,10 +4,12 @@
       "headline1": "ONE京橋コモンズ",
       "headline2": ""
     },
-    "sponsors": {
-      "title": "私たちのスポンサー",
-      "description": "私たちのミッションを可能にするために支援してくださるスポンサーの皆様に感謝いたします。",
-      "becomeASponsor": "スポンサーになる"
+    "partners": {
+      "title": "私たちのパートナー",
+      "description1": "人が集まることでできることが増える",
+      "description2": "できることが増えることで人が集まる",
+      "description3": "共に創って参りましょう",
+      "becomeAPartner": "パートナーに興味がある"
     },
     "footer": {
       "termsOfService": "利用規約",

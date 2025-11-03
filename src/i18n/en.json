@@ -4,10 +4,12 @@
       "headline1": "ONE京橋コモンズ",
       "headline2": ""
     },
-    "sponsors": {
-      "title": "Our Sponsors",
-      "description": "We are grateful for the support of our sponsors who help make our events possible.",
-      "becomeASponsor": "Become a Sponsor"
+    "partners": {
+      "title": "Our partners",
+      "description1": "When people come together, we can accomplish more",
+      "description2": "As we can accomplish more, more people gather",
+      "description3": "Let's create together",
+      "becomeAPartner": "Become a partner"
     },
     "footer": {
       "termsOfService": "Terms of Service",

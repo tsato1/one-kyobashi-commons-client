@@ -16,7 +16,7 @@ export const Hero = async () => {
           priority />
       </div> */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/60" />
-      <div className="absolute min-w-full sm:min-w-3/4 top-1/2 left-1/2 -translate-1/2 text-yellow-50 p-4 bg-amber-800">
+      <div className="absolute min-w-full sm:min-w-1/2 top-1/2 left-1/2 -translate-1/2 bg-primary text-primary-foreground p-4">
         {/* <h1 lang="ja" className="text-4xl sm:text-5xl">{t("headline1")}</h1> */}
         {/* <br /> */}
         <Typewriter text={DEMO_TEXT} typeSpeed={200} className="text-lg sm:text-xl" />
@@ -27,15 +27,15 @@ export const Hero = async () => {
 }
 
 const DEMO_TEXT = `ワレワレハ
-コノ街ノ　ヘイワヲ　マモル　タメ
+コノ街ノ　平和ヲ　マモル　タメ
 タチアガル
 「アイ」ト「キボウ」ノ
-センシ　ナノデアル
+戦士　ナノデアル
 
-飴ニモマケズ
-酒ニモマケズ
+飴　ニモ　マケズ
+酒　ニモ　マケズ
 渾身のボケがスベッテモ　マケズ
 
-タダ　コノ街ヲ　オモフ
+タダ　コノ街ヲ　オモシロク
 ソウイウモノニ
-ワタシハナリタイ`;
+ワタシハナリタイ　（仮）`;
