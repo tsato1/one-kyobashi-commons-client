@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { z } from "zod";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { meetingResponseSchema } from "@one-kyobashi-commons/shared";
 import { MutateMeeting } from "@/components/forms/meeting-form";
 import { FiltersState, MeetingFiltersState } from "./globalSlice";
-
-export type MeetingResponse = z.infer<typeof meetingResponseSchema>;
+import { MeetingResponse, UserInfo } from "@/types";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({

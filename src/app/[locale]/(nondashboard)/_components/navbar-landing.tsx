@@ -119,7 +119,7 @@ export const NavbarLanding = ({
                   <Avatar className="size-9 border-2 z-10">
                     <AvatarImage src={authUser.userInfo?.image} />
                     <AvatarFallback className="bg-primary">
-                      {authUser.userInfo?.nickname?.[0].toUpperCase() || authUser.userInfo?.email?.[0].toUpperCase()}
+                      {authUser.userInfo?.nickname?.[0]?.toUpperCase() || authUser.userInfo?.email?.[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <p className="max-w-24 hidden md:block rounded-r-full pr-3 pl-4 -translate-x-2 py-0.5 border-r border-t border-b text-accent/90 overflow-x-hidden text-ellipsis text-nowrap">

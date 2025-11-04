@@ -112,6 +112,10 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+body {
+  font-family: var(--font-dotgothic-regular), sans-serif;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -133,4 +137,20 @@
 /* Sonner Toast Styles */
 [data-close-button="true"] {
   @apply bg-background border-border text-foreground hover:bg-muted;
+}
+
+/* Typewriter animation effect */
+@keyframes blink-caret {
+  0%,
+  100% {
+    opacity: 0
+  }
+
+  50% {
+    opacity: 1
+  }
+}
+
+.animate-blink-caret {
+  animation: blink-caret 1s step-end infinite;
 }

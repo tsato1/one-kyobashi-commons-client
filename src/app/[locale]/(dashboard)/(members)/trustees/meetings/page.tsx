@@ -7,10 +7,11 @@ import { addDays, addMonths, endOfMonth, format, startOfMonth } from "date-fns";
 import { ja, enUS } from "date-fns/locale";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-import { MeetingResponse, useGetAllMeetingsQuery } from "@/state/api";
+import { useGetAllMeetingsQuery } from "@/state/api";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { formatTime, Locale } from "@/lib/utils";
+import { MeetingResponse } from "@/types";
 
 const MeetingsPage = () => {
   const t = useTranslations("");

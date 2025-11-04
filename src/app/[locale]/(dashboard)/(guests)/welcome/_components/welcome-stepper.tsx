@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { z } from 'zod';
 import { type Locale } from "date-fns/locale"
-import { firstStepSchema, secondStepSchema } from '@one-kyobashi-commons/shared';
 import { defineStepper } from '@stepperize/react';
 
 import { CustomFormField } from '@/components/forms/custom-form-field';
@@ -17,7 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { genMonths } from '@/components/ui/calendar-i18n';
 import { cn } from '@/lib/utils';
 import { RootState, useAppDispatch } from '@/state/redux';
-import { saveStepperData } from '@/state/onboardStepperSlice';
+import { firstStepSchema, saveStepperData, secondStepSchema } from '@/state/onboardStepperSlice';
 import { useGetAuthUserQuery, useUpdateUserMutation } from '@/state/api';
 
 const { useStepper, steps, utils } = defineStepper(
@@ -229,7 +228,7 @@ function InfoComponent({
           name="birthMonth"
           type="select"
           label="誕生月を教えてください"
-          initialValue={""}
+          initialValue={undefined}
           options={MONTHS}
           disabled={false} />
         <div className="text-xs font-medium text-gray-700">

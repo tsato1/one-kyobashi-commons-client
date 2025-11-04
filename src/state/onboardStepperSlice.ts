@@ -1,6 +1,22 @@
 import { z } from "zod";
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { firstStepSchema, secondStepSchema } from '@one-kyobashi-commons/shared';
+
+export const firstStepSchema = z.object({
+  isTermsAgreed: z.boolean().refine((val) => val === true, {
+    error: "規約に同意しなければなりません。",
+  }),
+});
+
+export const secondStepSchema = z.object({
+  nickname: z
+    .string()
+    .max(255, 'ニックネームは255文字までです')
+    .optional(),
+  birthMonth: z
+    .coerce.number({ error: "誕生月が選択されていません" })
+    .min(0)
+    .max(11),
+});
 
 type FirstStep = z.infer<typeof firstStepSchema>;
 type SecondStep = z.infer<typeof secondStepSchema>;

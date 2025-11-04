@@ -1,16 +1,14 @@
 import { AuthUser } from "aws-amplify/auth";
 
-declare global {
-  interface UserInfo {
-    id: string
-    cognitoId: string
-    email: string
-    image?: string
-    role: "crew" | "trustee"
-    nickname?: string
-    birthMonth?: number
-  }
+import {
+  meetingResponseSchema,
+  userResponseSchema
+} from "@one-kyobashi-commons/shared";
 
+export type MeetingResponse = z.infer<typeof meetingResponseSchema>;
+export type UserInfo = z.infer<typeof userResponseSchema>;
+
+declare global {
   interface Event {
     id: string
     name: string
@@ -23,6 +21,26 @@ declare global {
     photoUrls: string[] // For records
     createdBy: string
     user?: User
+  }
+
+  interface Meeting {
+    id: string,
+    visibility: string,
+    startDate: string,
+    endDate?: string,
+    timezone: string,
+    name: string,
+    description: string,
+    location?: string,
+    allowedRoles: string[],
+    materialUrls: string[],
+    joinUrl?: string,
+    createdBy: {
+      nickname: string,
+      image?: string,
+    },
+    createdAt: string,
+    updatedAt: string,
   }
 
   enum PaymentStatus {
