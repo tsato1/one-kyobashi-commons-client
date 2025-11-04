@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-export type MySheetType = "OpenMobileNavbarSheet"
+export type MySheetType = "OpenMobileNavbarSheet" | "OpenEventSheet"
 
 interface MySheetData {
   title?: string
