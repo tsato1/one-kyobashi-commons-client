@@ -6,8 +6,10 @@ import { startOfMonth, endOfMonth, addMonths, format, Locale } from "date-fns";
 import { toZonedTime } from 'date-fns-tz';
 import { enUS, ja } from "date-fns/locale";
 
+import { useMySheet } from "@/hooks/use-my-sheet";
 import { Calendar } from "@/components/ui/calendar-events";
 import { useGetMeetingsQuery } from "@/state/api";
+import { Event } from './event'
 
 export const Events = () => {
   const locale = useLocale();
@@ -59,14 +61,23 @@ const DayEvents = ({
   events,
   locale = enUS,
 }: DayEventsProps) => {
+  const { onOpen } = useMySheet();
+
+  const openEventSheet = (event: Meeting) => {
+    onOpen("OpenEventSheet", {
+      title: event.name,
+    });
+  }
+
   return (
     <div className="flex flex-col items-center">
+      <Event />
       <h2 className="text-lg sm:text-xl font-semibold mb-3">
         {format(date, 'MMM d', { locale }) + `${locale === ja ? '日' : ''}`}
       </h2>
       <div className="space-y-1">
         {events.map((event, id) => (
-          <div key={`event_${id}`} className="w-83 sm:w-[638px] lg:w-[919px] border rounded-md p-2">
+          <div key={`event_${id}`} className="w-83 sm:w-[638px] lg:w-[919px] cursor-pointer border rounded-md p-2" onClick={() => openEventSheet(event)}>
             <p>{event.name}</p>
             <p>場所：{event.location ? event.location[0].toUpperCase() + event.location.slice(1) : "未定"}</p>
             <span>時間：{format(toZonedTime(event.startDate, event.timezone), 'HH:mm', { locale })}~

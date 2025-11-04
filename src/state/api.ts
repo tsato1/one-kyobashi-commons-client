@@ -157,11 +157,6 @@ export const api = createApi({
             { type: "Meetings", id: "LIST" },
           ]
           : [{ type: "Meetings", id: "LIST" }],
-      async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          error: "ミーティングが取得できませんでした。"
-        });
-      },
     }),
 
     getAllMeetings: build.query<
