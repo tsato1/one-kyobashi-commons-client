@@ -35,7 +35,8 @@ export const MeetingForm = ({
     defaultValues: initialData || {},
   });
 
-  const { isDirty } = form.formState;
+  const { isDirty, errors } = form.formState;
+  console.log(errors)
 
   useEffect(() => {
     if (initialData) {
@@ -100,6 +101,15 @@ export const MeetingForm = ({
               placeholder="未設定"
               disabled={isPending}
               locale={dateFnsLocale} />
+            <CustomFormField
+              name="timezone"
+              label="タイムゾーン"
+              type="select"
+              disabled={isPending}
+              options={[
+                { value: "Asia/Tokyo", label: "Asia/Tokyo" },
+                { value: "America/Los_Angeles", label: "America/Los Angeles" },
+              ]} />
             <CustomFormField
               name="name"
               label="名前"

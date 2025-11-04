@@ -23,6 +23,26 @@ declare global {
     user?: User
   }
 
+  interface Meeting {
+    id: string,
+    visibility: string,
+    startDate: string,
+    endDate?: string,
+    timezone: string,
+    name: string,
+    description: string,
+    location?: string,
+    allowedRoles: string[],
+    materialUrls: string[],
+    joinUrl?: string,
+    createdBy: {
+      nickname: string,
+      image?: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  }
+
   enum PaymentStatus {
     Pending,
     Paid,

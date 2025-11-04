@@ -18,16 +18,10 @@ import { enUS } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
 
-interface Event {
-  id: string;
-  name: string;
-  category: string;
-  date: Date;
-}
-
 interface CalendarProps {
-  onSelect: (event: Event) => void;
-  events: Event[];
+  onItemSelect: (event: Meeting) => void;
+  onDaySelect: (date: Date, events: Meeting[]) => void;
+  events: Meeting[];
   locale: Locale;
 }
 
@@ -46,7 +40,8 @@ const eachDayOfMonth = (month: Date): Date[] => {
 };
 
 export const Calendar = ({
-  onSelect,
+  onItemSelect,
+  onDaySelect,
   events,
   locale = enUS,
 }: CalendarProps) => {
@@ -106,13 +101,13 @@ export const Calendar = ({
             <div key={`empty-${i}`} className="h-10" />
           ))}
           {days.map((day) => {
-            const dayEvents = events.filter((event) => isSameDay(new Date(event.date), day));
+            const dayEvents = events.filter((event) => isSameDay(new Date(event.startDate), day));
             return (
               <div
                 key={day.toString()}
                 className={`w-11 sm:w-[88px] lg:w-32 h-20 flex flex-col rounded text-center text-nowrap space-y-0.5
                   ${isSameMonth(day, month) ? 'bg-gray-50' : 'bg-gray-200'} `}
-                onClick={() => dayEvents.length > 0 && onSelect(dayEvents[0])}
+                onClick={() => dayEvents.length > 0 && onDaySelect(day, dayEvents)}
               >
                 <span className="text-sm">{format(day, 'd')}</span>
                 {dayEvents.slice(0, 2).map((event) => (
@@ -120,7 +115,7 @@ export const Calendar = ({
                     key={event.id}
                     title={event.name}
                     className="text-xs truncate w-full cursor-pointer bg-primary rounded transition-all duration-200 p-0.5"
-                    onClick={() => onSelect(event)}
+                    onClick={() => onItemSelect(event)}
                   >
                     {event.name}
                   </span>
