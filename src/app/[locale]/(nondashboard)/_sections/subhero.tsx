@@ -2,10 +2,10 @@ import Image from "next/image"
 
 export const Subhero = () => {
   return (
-    <section id="subhero" className="w-full max-w-5xl py-20 sm:py-40">
+    <section id="subhero" className="w-full max-w-5xl space-y-0.5 py-20 sm:py-40">
       <h2 className="text-center text-3xl sm:text-4xl font-semibold mb-4">Welcome to ONE京橋コモンズ</h2>
 
-      <div className="relative w-full h-[500px]">
+      <div className="relative w-full h-[570px]">
         <Image
           src="/images/about1.png"
           alt="open_innovation"
@@ -14,7 +14,7 @@ export const Subhero = () => {
           priority
           fill />
       </div>
-      <div className="relative w-full h-[500px]">
+      <div className="relative w-full h-[570px]">
         <Image
           src="/images/about2.png"
           alt="nexus"
@@ -23,7 +23,7 @@ export const Subhero = () => {
           priority
           fill />
       </div>
-      <div className="relative w-full h-[500px]">
+      <div className="relative w-full h-[570px]">
         <Image
           src="/images/about3.png"
           alt="engagement"
@@ -32,7 +32,7 @@ export const Subhero = () => {
           priority
           fill />
       </div>
-      <div className="relative w-full h-[500px]">
+      <div className="relative w-full h-[570px]">
         <Image
           src="/images/about4.png"
           alt="one_to_neo"
